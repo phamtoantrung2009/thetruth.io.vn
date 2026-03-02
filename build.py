@@ -116,7 +116,7 @@ def get_related_links(tags):
     """Generate related links based on tags."""
     # Simple tag-based matching
     if not tags:
-        return '<a href="/thu-nhap-vs-tai-san-vietnam">Thu Nhập vs Tài Sản — Ảo Tưởng</a>'
+        return '<a href="/thu-nhap-vs-tai-san-vietnam.html">Thu Nhập vs Tài Sản — Ảo Tưởng</a>'
     
     # Find matching tensions
     matches = []
@@ -126,7 +126,7 @@ def get_related_links(tags):
     
     if matches:
         return '\n'.join(matches[:3])
-    return '<a href="/thu-nhap-vs-tai-san-vietnam">Thu Nhập vs Tài Sản — Ảo Tưởng</a>'
+    return '<a href="/thu-nhap-vs-tai-san-vietnam.html">Thu Nhập vs Tài Sản — Ảo Tưởng</a>'
 
 def build_site():
     """Build the static site."""
@@ -182,14 +182,14 @@ def build_site():
         post_html = post_html.replace('{{date}}', date)
         post_html = post_html.replace('{{tags}}', tags_html)
         post_html = post_html.replace('{{content}}', html_content)
-        post_html = post_html.replace('{{url}}', f'/{slug}')
+        post_html = post_html.replace('{{url}}', f'/{slug}.html')
         post_html = post_html.replace('{{related}}', get_related_links(tags))
         
         (OUTPUT_DIR / f"{slug}.html").write_text(post_html, encoding='utf-8')
         
         # Add to index
         posts_html.append(f'''<li>
-            <a href="/{slug}">
+            <a href="/{slug}.html">
                 <h2>{title}</h2>
                 <p class="excerpt">{excerpt}</p>
                 <div class="meta"><time>{date}</time> {tags_html}</div>
@@ -198,7 +198,7 @@ def build_site():
         
         # Add to articles list
         articles_list.append(f'''<li>
-            <a href="/{slug}">
+            <a href="/{slug}.html">
                 <h2>{title}</h2>
                 <p class="excerpt">{excerpt}</p>
                 <div class="meta"><time>{date}</time> {tags_html}</div>
