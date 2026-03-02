@@ -155,6 +155,14 @@ def build_site():
         date = data.get('date', '')
         excerpt = data.get('excerpt', '')
         slug = data.get('slug', md_file.stem)
+        
+        # Clean slug: strip quotes, backslashes, and whitespace
+        slug = slug.strip().strip('"').strip("'").replace('\\', '')
+        
+        # Validate slug is safe for filesystem
+        if not slug or slug.startswith('.'):
+            slug = md_file.stem
+        
         tags_raw = data.get('tags', '')
         
         # Process tags
