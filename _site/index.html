@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SABLE — Structural Realities Decoded</title>
+    <meta name="description" content="Uncomfortable truths about Vietnamese middle-class reality. Calm. Precise. System-aware analysis.">
+    <meta property="og:title" content="SABLE — Structural Realities Decoded">
+    <meta property="og:description" content="Uncomfortable truths about Vietnamese middle-class reality.">
+    <meta property="og:type" content="website">
+    <link rel="canonical" href="https://thetruth.io.vn">
+    <style>
+        :root {
+            --bg: #0d0d0d;
+            --text: #e5e5e5;
+            --text-muted: #666;
+            --accent: #e63946;
+            --accent-dim: #a62833;
+            --border: #262626;
+            --card-bg: #141414;
+            --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: var(--font-sans);
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 1.5rem 3rem;
+        }
+        a { color: var(--text); text-decoration: none; }
+        a:hover { color: var(--accent); }
+        
+        /* Header */
+        header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            padding: 1.5rem 0;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 2.5rem;
+        }
+        .logo { font-size: 1.4rem; font-weight: 700; letter-spacing: -0.02em; }
+        .logo span { color: var(--accent); }
+        nav a { 
+            color: var(--text-muted); 
+            margin-left: 1.5rem; 
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+        nav a:hover { color: var(--text); }
+        
+        /* Hero */
+        .hero { margin: 3rem 0 4rem; }
+        .hero h1 { 
+            font-size: 2.8rem; 
+            font-weight: 700; 
+            line-height: 1.1; 
+            margin-bottom: 1rem;
+            letter-spacing: -0.03em;
+        }
+        .hero p { 
+            color: var(--text-muted); 
+            font-size: 1.15rem; 
+            max-width: 540px;
+        }
+        
+        /* TikTok Embed Placeholder */
+        .tiktok-section {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 2rem;
+            margin: 2.5rem 0;
+            text-align: center;
+        }
+        .tiktok-section h3 { font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1rem; }
+        .tiktok-placeholder {
+            background: #1a1a1a;
+            border-radius: 6px;
+            padding: 3rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        
+        /* Email Capture Placeholder */
+        .email-capture {
+            background: linear-gradient(135deg, var(--card-bg) 0%, #1a1a1a 100%);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 2rem;
+            margin: 2.5rem 0;
+        }
+        .email-capture h3 { margin-bottom: 0.5rem; }
+        .email-capture p { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1rem; }
+        .email-form { display: flex; gap: 0.5rem; }
+        .email-form input {
+            flex: 1;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 0.75rem 1rem;
+            border-radius: 4px;
+            font-size: 0.95rem;
+        }
+        .email-form input::placeholder { color: var(--text-muted); }
+        .email-form button {
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .email-form button:hover { background: var(--accent-dim); }
+        
+        /* Section Headers */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .section-header h2 { font-size: 1.25rem; font-weight: 600; }
+        .section-header a { color: var(--text-muted); font-size: 0.85rem; }
+        
+        /* Tension Cards */
+        .tensions-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin: 2rem 0 3rem;
+        }
+        .tension-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 1.25rem;
+            transition: border-color 0.2s;
+        }
+        .tension-card:hover { border-color: var(--accent); }
+        .tension-card h3 { 
+            font-size: 0.95rem; 
+            font-weight: 600; 
+            margin-bottom: 0.5rem;
+            line-height: 1.3;
+        }
+        .tension-card p { 
+            font-size: 0.8rem; 
+            color: var(--text-muted); 
+        }
+        
+        /* Posts List */
+        .posts { list-style: none; }
+        .posts li { margin-bottom: 2rem; }
+        .posts a { display: block; }
+        .posts a:hover h2 { color: var(--accent); }
+        .posts h2 { 
+            font-size: 1.35rem; 
+            font-weight: 600; 
+            margin-bottom: 0.4rem;
+            transition: color 0.2s;
+        }
+        .posts .excerpt { color: #999; font-size: 0.95rem; margin-bottom: 0.5rem; }
+        .posts .meta { color: var(--text-muted); font-size: 0.8rem; }
+        .tag { 
+            display: inline-block; 
+            background: var(--border); 
+            padding: 0.15rem 0.5rem; 
+            border-radius: 3px; 
+            font-size: 0.7rem; 
+            margin-right: 0.4rem;
+        }
+        
+        /* Footer */
+        footer { 
+            margin-top: 4rem; 
+            padding-top: 2rem; 
+            border-top: 1px solid var(--border); 
+            color: var(--text-muted); 
+            font-size: 0.8rem; 
+            text-align: center;
+        }
+        
+        @media (max-width: 600px) {
+            .hero h1 { font-size: 2rem; }
+            .tensions-grid { grid-template-columns: 1fr; }
+            .email-form { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="/" class="logo">SABLE<span>.</span></a>
+        <nav>
+            <a href="/articles">Articles</a>
+            <a href="/tensions">Tensions</a>
+            <a href="/about">About</a>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <h1>Uncomfortable truths about Vietnamese middle-class reality.</h1>
+        <p>We decode structural forces — not to entertain, but to clarify. Income vs assets. Work vs capital. Stability vs escape.</p>
+    </section>
+
+    <!-- TikTok Embed Section -->
+    <section class="tiktok-section">
+        <h3>Latest Analysis</h3>
+        <div class="tiktok-placeholder">
+            [TikTok video embed will appear here]<br>
+            <small style="color: #444">Follow @sable.vn on TikTok</small>
+        </div>
+    </section>
+
+    <!-- Email Capture -->
+    <section class="email-capture">
+        <h3>Get structural clarity weekly</h3>
+        <p>No motivation. No hype. Just analysis that matters.</p>
+        <form class="email-form" onsubmit="event.preventDefault(); alert('Email capture coming soon');">
+            <input type="email" placeholder="your@email.com" required>
+            <button type="submit">Subscribe</button>
+        </form>
+    </section>
+
+    <!-- Tensions Preview -->
+    <section>
+        <div class="section-header">
+            <h2>Core Tensions</h2>
+            <a href="/tensions">View all →</a>
+        </div>
+        <div class="tensions-grid">
+            <a href="/tensions#income-vs-assets" class="tension-card">
+            <h3>Earned Income vs. Asset Poverty</h3>
+            <p>Salary doesn't build wealth</p>
+        </a>
+<a href="/tensions#salary-vs-inflation" class="tension-card">
+            <h3>Salary Growth vs. Inflation</h3>
+            <p>Wages can't keep up with asset inflation</p>
+        </a>
+<a href="/tensions#hard-work-capital" class="tension-card">
+            <h3>Hard Work vs. Capital Requirements</h3>
+            <p>Connections > effort</p>
+        </a>
+<a href="/tensions#family-duty" class="tension-card">
+            <h3>Family Duty vs. Personal Autonomy</h3>
+            <p>Filial piety economics</p>
+        </a>
+<a href="/tensions#parental-sacrifice" class="tension-card">
+            <h3>Parental Sacrifice vs. Reciprocity</h3>
+            <p>Intergenerational debt</p>
+        </a>
+<a href="/tensions#peer-comparison" class="tension-card">
+            <h3>Peer Visibility vs. Personal Stagnation</h3>
+            <p>Social media distortion</p>
+        </a>
+        </div>
+    </section>
+
+    <!-- Featured Articles -->
+    <section>
+        <div class="section-header">
+            <h2>Latest Analysis</h2>
+            <a href="/articles">View all →</a>
+        </div>
+        <ul class="posts">
+            <li>
+            <a href="/"income-vs-assets-vietnam"">
+                <h2>"Income vs Asset Ownership: The Illusion of the Vietnamese Middle Class"</h2>
+                <p class="excerpt">"You make 30 million VND/month. You still can't own a home. Here's why the math was never designed for you."</p>
+                <div class="meta"><time>"2026-03-01"</time> <span class="tag">income</span><span class="tag">assets</span><span class="tag">housing</span><span class="tag">vietnam-economy</span><span class="tag">middle-class</span></div>
+            </a>
+        </li>
+        </ul>
+    </section>
+
+    <footer>
+        <p>© 2026 SABLE — Decoding structural realities</p>
+    </footer>
+</body>
+</html>

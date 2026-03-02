@@ -1,0 +1,2 @@
+# Python dependencies for site build
+# Minimal - standard library only
