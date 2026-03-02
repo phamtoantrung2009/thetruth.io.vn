@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SABLE — Structural Realities Decoded</title>
-    <meta name="description" content="Uncomfortable truths about Vietnamese middle-class reality. Calm. Precise. System-aware analysis.">
-    <meta property="og:title" content="SABLE — Structural Realities Decoded">
-    <meta property="og:description" content="Uncomfortable truths about Vietnamese middle-class reality.">
+    <title>SABLE — Sự Thật Về Thực Tại Việt Nam</title>
+    <meta name="description" content="Sự thật về thực tại tầng lớp trung lưu Việt Nam. Phân tích hệ thống, không phải lời khuyên.">
+    <meta property="og:title" content="SABLE — Sự Thật Về Thực Tại Việt Nam">
+    <meta property="og:description" content="Sự thật về thực tại của tầng lớp trung lưu Việt Nam.">
     <meta property="og:type" content="website">
     <link rel="canonical" href="https://thetruth.io.vn">
     <style>
@@ -33,7 +33,6 @@
         a { color: var(--text); text-decoration: none; }
         a:hover { color: var(--accent); }
         
-        /* Header */
         header { 
             display: flex; 
             justify-content: space-between; 
@@ -52,10 +51,9 @@
         }
         nav a:hover { color: var(--text); }
         
-        /* Hero */
         .hero { margin: 3rem 0 4rem; }
         .hero h1 { 
-            font-size: 2.8rem; 
+            font-size: 2.6rem; 
             font-weight: 700; 
             line-height: 1.1; 
             margin-bottom: 1rem;
@@ -63,11 +61,10 @@
         }
         .hero p { 
             color: var(--text-muted); 
-            font-size: 1.15rem; 
+            font-size: 1.1rem; 
             max-width: 540px;
         }
         
-        /* TikTok Embed Placeholder */
         .tiktok-section {
             background: var(--card-bg);
             border: 1px solid var(--border);
@@ -85,7 +82,6 @@
             font-size: 0.9rem;
         }
         
-        /* Email Capture Placeholder */
         .email-capture {
             background: linear-gradient(135deg, var(--card-bg) 0%, #1a1a1a 100%);
             border: 1px solid var(--border);
@@ -119,7 +115,6 @@
         }
         .email-form button:hover { background: var(--accent-dim); }
         
-        /* Section Headers */
         .section-header {
             display: flex;
             justify-content: space-between;
@@ -131,7 +126,6 @@
         .section-header h2 { font-size: 1.25rem; font-weight: 600; }
         .section-header a { color: var(--text-muted); font-size: 0.85rem; }
         
-        /* Tension Cards */
         .tensions-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -157,7 +151,6 @@
             color: var(--text-muted); 
         }
         
-        /* Posts List */
         .posts { list-style: none; }
         .posts li { margin-bottom: 2rem; }
         .posts a { display: block; }
@@ -179,7 +172,6 @@
             margin-right: 0.4rem;
         }
         
-        /* Footer */
         footer { 
             margin-top: 4rem; 
             padding-top: 2rem; 
@@ -200,41 +192,41 @@
     <header>
         <a href="/" class="logo">SABLE<span>.</span></a>
         <nav>
-            <a href="/articles">Articles</a>
-            <a href="/tensions">Tensions</a>
-            <a href="/about">About</a>
+            <a href="/phan-tich">Phân tích</a>
+            <a href="/ten-xo">Bản đồ nỗi đau</a>
+            <a href="/ve-he-thong">Về hệ thống</a>
         </nav>
     </header>
 
     <section class="hero">
-        <h1>Uncomfortable truths about Vietnamese middle-class reality.</h1>
-        <p>We decode structural forces — not to entertain, but to clarify. Income vs assets. Work vs capital. Stability vs escape.</p>
+        <h1>Sự thật về thực tại của tầng lớp trung lưu Việt Nam.</h1>
+        <p>Chúng tôi giải mã các lực hệ thống — thu nhập vs tài sản, làm việc vs vốn, ổn định vs Thoát. Không động viên. Để làm rõ.</p>
     </section>
 
     <!-- TikTok Embed Section -->
     <section class="tiktok-section">
-        <h3>Latest Analysis</h3>
+        <h3>Phân Tích Mới Nhất</h3>
         <div class="tiktok-placeholder">
-            [TikTok video embed will appear here]<br>
-            <small style="color: #444">Follow @sable.vn on TikTok</small>
+            [TikTok video embed sẽ hiện ở đây]<br>
+            <small style="color: #444">Follow @sable.vn trên TikTok</small>
         </div>
     </section>
 
     <!-- Email Capture -->
     <section class="email-capture">
-        <h3>Get structural clarity weekly</h3>
-        <p>No motivation. No hype. Just analysis that matters.</p>
-        <form class="email-form" onsubmit="event.preventDefault(); alert('Email capture coming soon');">
-            <input type="email" placeholder="your@email.com" required>
-            <button type="submit">Subscribe</button>
+        <h3>Nhận phân tích hàng tuần</h3>
+        <p>Không động viên. Không hype. Chỉ có sự thật.</p>
+        <form class="email-form" onsubmit="event.preventDefault(); alert('Sắp ra mắt');">
+            <input type="email" placeholder="email@cuaban.com" required>
+            <button type="submit">Đăng ký</button>
         </form>
     </section>
 
     <!-- Tensions Preview -->
     <section>
         <div class="section-header">
-            <h2>Core Tensions</h2>
-            <a href="/tensions">View all →</a>
+            <h2>Căng Thẳng Cốt Lõi</h2>
+            <a href="/ten-xo">Xem tất cả →</a>
         </div>
         <div class="tensions-grid">
             {{tensions}}
@@ -244,8 +236,8 @@
     <!-- Featured Articles -->
     <section>
         <div class="section-header">
-            <h2>Latest Analysis</h2>
-            <a href="/articles">View all →</a>
+            <h2>Phân Tích Mới Nhất</h2>
+            <a href="/phan-tich">Xem tất cả →</a>
         </div>
         <ul class="posts">
             {{posts}}
@@ -253,7 +245,7 @@
     </section>
 
     <footer>
-        <p>© 2026 SABLE — Decoding structural realities</p>
+        <p>© 2026 SABLE — Giải mã thực tại hệ thống</p>
     </footer>
 </body>
 </html>

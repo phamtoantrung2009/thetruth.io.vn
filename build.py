@@ -16,20 +16,20 @@ OUTPUT_DIR = BASE_DIR / "_site"
 
 OUTPUT_DIR.mkdir(exist_ok=True)
 
-# Tension data (loaded from knowledge/tensions.md concepts)
+# Tension data (Vietnamese)
 TENSIONS = [
-    {"id": "income-vs-assets", "name": "Earned Income vs. Asset Poverty", "mechanism": "Salary doesn't build wealth", "tags": ["income", "assets", "wealth"]},
-    {"id": "salary-vs-inflation", "name": "Salary Growth vs. Inflation", "mechanism": "Wages can't keep up with asset inflation", "tags": ["income", "inflation"]},
-    {"id": "hard-work-capital", "name": "Hard Work vs. Capital Requirements", "mechanism": "Connections > effort", "tags": ["work", "opportunity"]},
-    {"id": "family-duty", "name": "Family Duty vs. Personal Autonomy", "mechanism": "Filial piety economics", "tags": ["family", "duty"]},
-    {"id": "parental-sacrifice", "name": "Parental Sacrifice vs. Reciprocity", "mechanism": "Intergenerational debt", "tags": ["family", "sacrifice"]},
-    {"id": "peer-comparison", "name": "Peer Visibility vs. Personal Stagnation", "mechanism": "Social media distortion", "tags": ["social", "comparison"]},
-    {"id": "location-lock", "name": "Urban Opportunity vs. Family Location Lock", "mechanism": "Urban concentration", "tags": ["location", "migration"]},
-    {"id": "stability-risk", "name": "Stability vs. Risk for Escape", "mechanism": "Survival mindset", "tags": ["risk", "safety"]},
-    {"id": "ownership-renting", "name": "Ownership vs. Lifelong Renting", "mechanism": "Real estate inflation", "tags": ["property", "housing"]},
-    {"id": "respectability-authenticity", "name": "Respectability vs. Authenticity", "mechanism": "Social capital", "tags": ["identity", "conformity"]},
-    {"id": "youth-worship", "name": "Youth Worship vs. Earned Wisdom", "mechanism": "Age discrimination", "tags": ["age", "wisdom"]},
-    {"id": "information-overload", "name": "Information Abundance vs. Actionable Clarity", "mechanism": "Advice overload", "tags": ["information", "advice"]},
+    {"id": "thu-nhap-vs-tai-san", "name": "Thu Nhập vs. Nghèo Tài Sản", "mechanism": "Lương không tạo tài sản", "tags": ["thu-nhap", "tai-san", "cuong-luong"]},
+    {"id": "luong-vs-lam-phat", "name": "Tăng Lương vs. Lạm Phát", "mechanism": "Lương không theo kịp lạm phát tài sản", "tags": ["thu-nhap", "lam-phat"]},
+    {"id": "lam-viec-cap-von", "name": "Làm Việc Chăm Chỉ vs. Yêu Cầu Vốn", "mechanism": "Quan hệ > nỗ lực", "tags": ["cong-viec", "co-hoi"]},
+    {"id": "nghia-vu-gia-dinh", "name": "Nghĩa Vụ Gia Đình vs. Tự Chủ", "mechanism": "Kinh tế hiếu nghĩa", "tags": ["gia-dinh", "nghia-vu"]},
+    {"id": "hien-menh-cha-me", "name": "Hi Sinh Của Cha Mẹ vs. Đền Đáp", "mechanism": "Nợ liên thế hệ", "tags": ["gia-dinh", "hien-menh"]},
+    {"id": "so-sanh-ban-be", "name": "So Sánh Bạn Bè vs. Đình Trệ", "mechanism": "Méo mó mạng xã hội", "tags": ["xa-hoi", "so-sanh"]},
+    {"id": "vi-tri-c-dinh", "name": "Cơ Hội Đô Thị vs. Kẹt Gia Đình", "mechanism": "Tập trung đô thị", "tags": ["vi-tri", "di-cu"]},
+    {"id": "on-dinh-ry", "name": "Ổn Định vs. Rủi Ro", "mechanism": "Tư duy sinh tồn", "tags": ["rui-ro", "an-toan"]},
+    {"id": "so-huu-thue", "name": "Sở Hữu vs. Thuê Trọ", "mechanism": "Lạm phát bất động sản", "tags": ["nha-dat", "so-huu"]},
+    {"id": "danh-du-chu-thuc", "name": "Danh Dự vs. Chân Thực", "mechanism": "Vốn xã hội", "tags": ["ban-sac", "danh-du"]},
+    {"id": "tre-trong-kinh-nghiem", "name": "Tôn Thờ Tuổi Trẻ vs. Trí Tuệ", "mechanism": "Phân biệt tuổi tác", "tags": ["tuoi", "kinh-nghiem"]},
+    {"id": "thong-tin-qua-tai", "name": "Thông Tin Quá Tải vs. Rõ Ràng", "mechanism": "Quá tải lời khuyên", "tags": ["thong-tin", "loi-khuyen"]},
 ]
 
 def md_to_html(text):
@@ -94,7 +94,7 @@ def get_tensions_html():
     """Generate tensions list for homepage."""
     items = []
     for t in TENSIONS[:6]:  # Top 6 for preview
-        items.append(f'''<a href="/tensions#{t['id']}" class="tension-card">
+        items.append(f'''<a href="/ten-xo#{t['id']}" class="tension-card">
             <h3>{t['name']}</h3>
             <p>{t['mechanism']}</p>
         </a>''')
@@ -106,9 +106,9 @@ def get_tensions_full_html():
     for t in TENSIONS:
         items.append(f'''<div class="tension" id="{t['id']}">
             <h2>{t['name']}</h2>
-            <p class="mechanism"><strong>Mechanism:</strong> {t['mechanism']}</p>
+            <p class="mechanism"><strong>Cơ chế:</strong> {t['mechanism']}</p>
             <div class="tags">{" ".join([f'<span class="tag">{tag}</span>' for tag in t['tags']])}</div>
-            <a href="/articles?tag={t['tags'][0]}" class="related-link">View articles →</a>
+            <a href="/phan-tich?tag={t['tags'][0]}" class="related-link">Xem bài phân tích →</a>
         </div>''')
     return '\n'.join(items)
 
@@ -116,17 +116,17 @@ def get_related_links(tags):
     """Generate related links based on tags."""
     # Simple tag-based matching
     if not tags:
-        return '<a href="/income-vs-asset-ownership-vietnam">Income vs Assets — The Illusion</a>'
+        return '<a href="/thu-nhap-vs-tai-san-vietnam">Thu Nhập vs Tài Sản — Ảo Tưởng</a>'
     
     # Find matching tensions
     matches = []
     for t in TENSIONS:
         if any(tag in t['tags'] for tag in tags):
-            matches.append(f'<a href="/tensions#{t["id"]}">{t["name"]}</a>')
+            matches.append(f'<a href="/ten-xo#{t["id"]}">{t["name"]}</a>')
     
     if matches:
         return '\n'.join(matches[:3])
-    return '<a href="/income-vs-asset-ownership-vietnam">Income vs Assets — The Illusion</a>'
+    return '<a href="/thu-nhap-vs-tai-san-vietnam">Thu Nhập vs Tài Sản — Ảo Tưởng</a>'
 
 def build_site():
     """Build the static site."""
