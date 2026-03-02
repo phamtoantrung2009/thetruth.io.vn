@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SABLE — Sự Thật Về Thực Tại Việt Nam</title>
+    <title>THE TRUTH — Sự Thật Về Thực Tại Việt Nam</title>
     <meta name="description" content="Sự thật về thực tại tầng lớp trung lưu Việt Nam. Phân tích hệ thống, không phải lời khuyên.">
-    <meta property="og:title" content="SABLE — Sự Thật Về Thực Tại Việt Nam">
+    <meta property="og:title" content="THE TRUTH — Sự Thật Về Thực Tại Việt Nam">
     <meta property="og:description" content="Sự thật về thực tại của tầng lớp trung lưu Việt Nam.">
     <meta property="og:type" content="website">
     <link rel="canonical" href="https://thetruth.io.vn">
@@ -80,6 +80,29 @@
             padding: 3rem;
             color: var(--text-muted);
             font-size: 0.9rem;
+        }
+        
+        .tiktok-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+        }
+        
+        .tiktok-embed {
+            background: #1a1a1a;
+            border-radius: 6px;
+            padding: 0.75rem;
+            margin: 0;
+            text-align: center;
+        }
+        
+        .tiktok-embed section {
+            text-align: center;
+        }
+        
+        .tiktok-embed a {
+            color: var(--text-muted);
+            font-size: 0.8rem;
         }
         
         .email-capture {
@@ -185,12 +208,13 @@
             .hero h1 { font-size: 2rem; }
             .tensions-grid { grid-template-columns: 1fr; }
             .email-form { flex-direction: column; }
+            .tiktok-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
     <header>
-        <a href="/" class="logo">SABLE<span>.</span></a>
+        <a href="/" class="logo">THE TRUTH<span>.</span></a>
         <nav>
             <a href="/phan-tich">Phân tích</a>
             <a href="/ten-xo">Bản đồ nỗi đau</a>
@@ -206,9 +230,22 @@
     <!-- TikTok Embed Section -->
     <section class="tiktok-section">
         <h3>Phân Tích Mới Nhất</h3>
-        <div class="tiktok-placeholder">
-            [TikTok video embed sẽ hiện ở đây]<br>
-            <small style="color: #444">Follow @sable.vn trên TikTok</small>
+        <div class="tiktok-grid">
+            <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@pepsiman1331/photo/7598511979979984136">
+                <section>
+                    <a target="_blank" title="@pepsiman1331" href="https://www.tiktok.com/@pepsiman1331/photo/7598511979979984136">@pepsiman1331</a>
+                </section>
+            </blockquote>
+            <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@pepsiman1331/photo/7603165751159131400">
+                <section>
+                    <a target="_blank" title="@pepsiman1331" href="https://www.tiktok.com/@pepsiman1331/photo/7603165751159131400">@pepsiman1331</a>
+                </section>
+            </blockquote>
+            <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@pepsiman1331/photo/7595431276203560199">
+                <section>
+                    <a target="_blank" title="@pepsiman1331" href="https://www.tiktok.com/@pepsiman1331/photo/7595431276203560199">@pepsiman1331</a>
+                </section>
+            </blockquote>
         </div>
     </section>
 
@@ -309,7 +346,7 @@
     </section>
 
     <footer>
-        <p>© 2026 SABLE — Giải mã thực tại hệ thống</p>
+        <p>© 2026 THE TRUTH — Giải mã thực tại hệ thống</p>
     </footer>
 </body>
 </html>

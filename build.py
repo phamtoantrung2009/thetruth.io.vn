@@ -214,16 +214,16 @@ def build_site():
     # Build articles index page
     articles_html = articles_template
     articles_html = articles_html.replace('{{articles}}', '\n'.join(articles_list))
-    (OUTPUT_DIR / "articles.html").write_text(articles_html, encoding='utf-8')
+    (OUTPUT_DIR / "phan-tich.html").write_text(articles_html, encoding='utf-8')
     
     # Build tensions page
     tensions_html = tensions_template
     tensions_html = tensions_html.replace('{{tensions_list}}', get_tensions_full_html())
-    (OUTPUT_DIR / "tensions.html").write_text(tensions_html, encoding='utf-8')
+    (OUTPUT_DIR / "ten-xo.html").write_text(tensions_html, encoding='utf-8')
     
     # Build about page
     about_html = about_template
-    (OUTPUT_DIR / "about.html").write_text(about_html, encoding='utf-8')
+    (OUTPUT_DIR / "ve-he-thong.html").write_text(about_html, encoding='utf-8')
     
     # Copy static files
     static_dir = BASE_DIR / "static"
