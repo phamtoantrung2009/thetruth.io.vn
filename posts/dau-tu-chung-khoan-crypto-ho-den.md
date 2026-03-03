@@ -1,6 +1,8 @@
 ---
 title: "Đầu Tư Chứng Khoán & Crypto: Cuộc Chơi Của Cá Mập Hay Hố Đen Của Trung Lưu?"
 slug: "dau-tu-chung-khoan-crypto-ho-den"
+type: "post"
+status: "publish"
 excerpt: "Bạn thấy người khác kiếm tiền từ chứng khoán. Bạn mở tài khoản. Bạn thua. Đây là lý do bạn không bao giờ thắng — và ai đang thực sự thắng."
 tags: ["dau-tu", "chung-khoan", "crypto", "tai-chinh"]
 date: "2026-03-02"

@@ -1,6 +1,8 @@
 ---
 title: "Tại Sao Tiết Kiệm Không Bao Giờ Giúp Bạn Mua Được Nhà Phố"
 slug: "tiet-kiem-khong-mua-duoc-nha-pho"
+type: "post"
+status: "publish"
 excerpt: "Bạn tiết kiệm 10 triệu/tháng. Sau 10 năm, bạn có 1.2 tỷ. Căn nhà bạn nhắm tới giờ là 5 tỷ. Đây là lý do."
 tags: ["tai-san", "nha-dat", "tiet-kiem", "thu-nhap"]
 date: "2026-03-02"

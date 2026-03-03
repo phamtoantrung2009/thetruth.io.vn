@@ -30,8 +30,82 @@
         }
 
         a { color: var(--text); text-decoration: none; }
+<<<<<<< HEAD
 
         header {
+=======
+        a:hover { color: var(--accent); }
+        
+        header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            padding: 1.5rem 0;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 2.5rem;
+        }
+        .logo { font-size: 1.4rem; font-weight: 700; letter-spacing: -0.02em; }
+        .logo span { color: var(--accent); }
+        nav a { 
+            color: var(--text-muted); 
+            margin-left: 1.5rem; 
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+        nav a:hover { color: var(--text); }
+        
+        .intro { margin: 3rem 0 4rem; }
+        .intro h1 { 
+            font-size: 2.6rem; 
+            font-weight: 700; 
+            line-height: 1.1; 
+            margin-bottom: 1rem;
+            letter-spacing: -0.03em;
+        }
+        .intro p { 
+            color: var(--text-muted); 
+            font-size: 1.1rem; 
+            max-width: 540px;
+        }
+        
+        .email-capture {
+            background: linear-gradient(135deg, var(--card-bg) 0%, #1a1a1a 100%);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 2rem;
+            margin: 2.5rem 0;
+        }
+        .email-capture h3 { margin-bottom: 0.5rem; }
+        .email-capture p { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1rem; }
+        .email-form { display: flex; gap: 0.5rem; }
+        .email-form input {
+            flex: 1;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 0.75rem 1rem;
+            border-radius: 4px;
+            font-size: 0.95rem;
+        }
+        .email-form input::placeholder { color: var(--text-muted); }
+        .email-form button {
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .email-form button:hover { background: var(--accent-dim); }
+        
+        .section {
+            margin: 3rem 0;
+        }
+        .section-header {
+>>>>>>> 7a95e9e (minimal update)
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -39,6 +113,7 @@
             border-bottom: 1px solid var(--border);
             margin-bottom: 3rem;
         }
+<<<<<<< HEAD
 
         .logo {
             font-size: 1.3rem;
@@ -77,10 +152,22 @@
         .featured {
             margin: 4rem 0;
             padding: 2rem;
+=======
+        .section-header h2 { font-size: 1.25rem; font-weight: 600; }
+        .section-header a { color: var(--text-muted); font-size: 0.85rem; }
+        
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+        .card {
+>>>>>>> 7a95e9e (minimal update)
             background: var(--card-bg);
             border: 1px solid var(--border);
             border-radius: 8px;
         }
+<<<<<<< HEAD
 
         .featured h2 {
             font-size: 0.85rem;
@@ -124,8 +211,15 @@
 
         .tension-item h3 {
             font-size: 1.2rem;
+=======
+        .card:hover { border-color: var(--accent); }
+        .card h3 { 
+            font-size: 0.95rem; 
+            font-weight: 600; 
+>>>>>>> 7a95e9e (minimal update)
             margin-bottom: 0.5rem;
         }
+<<<<<<< HEAD
 
         .tension-item p {
             color: var(--text-muted);
@@ -136,6 +230,30 @@
             margin: 5rem 0;
             padding-top: 2rem;
             border-top: 1px solid var(--border);
+=======
+        .card p { 
+            font-size: 0.8rem; 
+            color: var(--text-muted); 
+        }
+        .card .type-badge {
+            display: inline-block;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+        
+        .posts { list-style: none; }
+        .posts li { margin-bottom: 2rem; }
+        .posts a { display: block; }
+        .posts a:hover h2 { color: var(--accent); }
+        .posts h2 { 
+            font-size: 1.35rem; 
+            font-weight: 600; 
+            margin-bottom: 0.4rem;
+            transition: color 0.2s;
+>>>>>>> 7a95e9e (minimal update)
         }
 
         .methodology h2 {
@@ -150,6 +268,7 @@
             color: var(--text-muted);
             max-width: 680px;
         }
+<<<<<<< HEAD
 
         footer {
             margin-top: 5rem;
@@ -161,11 +280,25 @@
 
         @media (max-width: 600px) {
             .hero h1 { font-size: 2.1rem; }
+=======
+        
+        .empty-state {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            font-style: italic;
+        }
+        
+        @media (max-width: 600px) {
+            .intro h1 { font-size: 2rem; }
+            .card-grid { grid-template-columns: 1fr; }
+            .email-form { flex-direction: column; }
+>>>>>>> 7a95e9e (minimal update)
         }
     </style>
 </head>
 
 <body>
+<<<<<<< HEAD
 
 <header>
     <a href="/" class="logo">THE TRUTH<span>.</span></a>
@@ -244,5 +377,131 @@
     © 2026 THE TRUTH — Giải mã thực tại hệ thống
 </footer>
 
+=======
+    <header>
+        <a href="/" class="logo">THE TRUTH<span>.</span></a>
+        <nav>
+            <a href="/post">Bài phân tích</a>
+            <a href="/pillar">Trụ cột</a>
+            <a href="/framework">Khung</a>
+            <a href="/letter">Thư</a>
+        </nav>
+    </header>
+
+    <!-- Intro Statement -->
+    <section class="intro">
+        <h1>Sự thật về thực tại của tầng lớp trung lưu Việt Nam.</h1>
+        <p>Chúng tôi giải mã các lực hệ thống — thu nhập vs tài sản, làm việc vs vốn, ổn định vs Thoát. Không động viên. Để làm rõ.</p>
+    </section>
+
+    <!-- Email Capture -->
+    <section class="email-capture">
+        <h3>Nhận phân tích hàng tuần</h3>
+        <p>Không động viên. Không hype. Chỉ có sự thật.</p>
+        <form class="email-form" onsubmit="event.preventDefault(); alert('Sắp ra mắt');">
+            <input type="email" placeholder="email@cuaban.com" required>
+            <button type="submit">Đăng ký</button>
+        </form>
+    </section>
+
+    <!-- Pillars (type=pillar) -->
+
+    <!-- Frameworks (type=framework) -->
+
+    <!-- Latest 10 Posts (type=post) -->
+    <section class="section">
+        <div class="section-header">
+            <h2>Bài Phân Tích Mới Nhất</h2>
+            <a href="/post">Xem tất cả →</a>
+        </div>
+        <ul class="posts">
+            <li>
+                <a href="/post/tiet-kiem-khong-mua-duoc-nha-pho">
+                    <h2>Tại Sao Tiết Kiệm Không Bao Giờ Giúp Bạn Mua Được Nhà Phố</h2>
+                    <p class="excerpt">Bạn tiết kiệm 10 triệu/tháng. Sau 10 năm, bạn có 1.2 tỷ. Căn nhà bạn nhắm tới giờ là 5 tỷ. Đây là lý do.</p>
+                    <div class="meta">
+                        <time>2026-03-02</time>
+                        <span class="tag">tai-san</span>
+                        <span class="tag">nha-dat</span>
+                        <span class="tag">tiet-kiem</span>
+                        <span class="tag">thu-nhap</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a href="/post/khung-hoang-nam-tinh-ap-luc-tru-cot">
+                    <h2>Khủng Hoảng Nam Tính: Áp Lực Trụ Cột và Sự Cô Độc Tuổi 30</h2>
+                    <p class="excerpt">Bạn 30 tuổi. Bạn là trụ cột gia đình. Bạn là người đàn ông duy nhất trong phòng họp không dám nói mình mệt. Đây là cái giá.</p>
+                    <div class="meta">
+                        <time>2026-03-02</time>
+                        <span class="tag">nam-tinh</span>
+                        <span class="tag">gia-dinh</span>
+                        <span class="tag">tam-ly</span>
+                        <span class="tag">xa-hoi</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a href="/post/he-thong-giao-duc-dao-tao-cong-nhan">
+                    <h2>Hệ Thống Giáo Dục Đang Đào Tạo Công Nhân, Không Phải Chủ Nhân</h2>
+                    <p class="excerpt">Bạn tốt nghiệp đại học với 3 năm kinh nghiệm thực tập. Bạn vẫn phải đi xin việc như thể chưa từng học. Đây là lý do.</p>
+                    <div class="meta">
+                        <time>2026-03-02</time>
+                        <span class="tag">giao-duc</span>
+                        <span class="tag">viec-lam</span>
+                        <span class="tag">dao-tao</span>
+                        <span class="tag">tri-thuc</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a href="/post/dau-tu-chung-khoan-crypto-ho-den">
+                    <h2>Đầu Tư Chứng Khoán &amp; Crypto: Cuộc Chơi Của Cá Mập Hay Hố Đen Của Trung Lưu?</h2>
+                    <p class="excerpt">Bạn thấy người khác kiếm tiền từ chứng khoán. Bạn mở tài khoản. Bạn thua. Đây là lý do bạn không bao giờ thắng — và ai đang thực sự thắng.</p>
+                    <div class="meta">
+                        <time>2026-03-02</time>
+                        <span class="tag">dau-tu</span>
+                        <span class="tag">chung-khoan</span>
+                        <span class="tag">crypto</span>
+                        <span class="tag">tai-chinh</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a href="/post/cai-bay-cong-luong-lam-phat-vietnam">
+                    <h2>Cái Bẫy Công Lương và Lạm Phát Thực Tế Tại Việt Nam</h2>
+                    <p class="excerpt">Bạn kiếm 30 triệu/tháng. Bạn vẫn không mua được nhà. Đây là lý do toán học không bao giờ nghiêng về bạn.</p>
+                    <div class="meta">
+                        <time>2026-03-02</time>
+                        <span class="tag">thu-nhap</span>
+                        <span class="tag">lam-phat</span>
+                        <span class="tag">viec-lam</span>
+                        <span class="tag">tai-san</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a href="/post/income-vs-assets-vietnam">
+                    <h2>Income vs Asset Ownership: The Illusion of the Vietnamese Middle Class</h2>
+                    <p class="excerpt">You make 30 million VND/month. You still can&#39;t own a home. Here&#39;s why the math was never designed for you.</p>
+                    <div class="meta">
+                        <time>2026-03-01</time>
+                        <span class="tag">income</span>
+                        <span class="tag">assets</span>
+                        <span class="tag">housing</span>
+                        <span class="tag">vietnam-economy</span>
+                        <span class="tag">middle-class</span>
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </section>
+
+    <!-- Letters (type=letter) - Optional preview -->
+
+    <footer>
+        <p>© 2026 THE TRUTH — Giải mã thực tại hệ thống</p>
+    </footer>
+>>>>>>> 7a95e9e (minimal update)
 </body>
 </html>
