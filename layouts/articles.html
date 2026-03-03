@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
@@ -100,11 +100,24 @@
     </header>
 
     <main>
-        <h1>Tất Cả Phân Tích</h1>
-        <p class="subtitle">Giải mã thực tại hệ thống cho nam giới Việt Nam 30+.</p>
+        <h1>{{ page_title | default("Tất Cả Phân Tích") }}</h1>
+        <p class="subtitle">{{ page_subtitle | default("Giải mã thực tại hệ thống cho nam giới Việt Nam 30+.") }}</p>
         
         <ul class="articles">
-            {{articles}}
+            {% for post in articles %}
+            <li>
+                <a href="/{{ post.slug }}.html">
+                    <h2>{{ post.title }}</h2>
+                    <p class="excerpt">{{ post.excerpt }}</p>
+                    <div class="meta">
+                        <time>{{ post.published_on.isoformat() }}</time>
+                        {% for tag in post.tags %}
+                        <span class="tag">{{ tag }}</span>
+                        {% endfor %}
+                    </div>
+                </a>
+            </li>
+            {% endfor %}
         </ul>
     </main>
 
@@ -113,3 +126,4 @@
     </footer>
 </body>
 </html>
+

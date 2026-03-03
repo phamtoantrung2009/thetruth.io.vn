@@ -19,7 +19,7 @@
    - Go to Cloudflare Dashboard → Pages
    - Connect GitHub repository
    - Settings:
-     - Build command: `python3 build.py`
+      - Build command: `pip install -r requirements.txt && python3 build.py`
      - Build output directory: `_site`
      - Python version: 3.11
 
@@ -39,7 +39,7 @@ npm install -g wrangler
 wrangler login
 
 # Deploy
-wrangler pages deploy site/_site \
+wrangler pages deploy _site \
   --project-name=sable-site \
   --branch=main
 ```
@@ -80,6 +80,7 @@ site/
 
 2. **Build site**
    ```bash
+   pip install -r requirements.txt
    python3 build.py
    ```
 
@@ -106,7 +107,7 @@ If needed for future features:
 
 **Build fails?**
 - Check Python version: `python3 --version` (need 3.11+)
-- Test locally: `python3 build.py`
+- Test locally: `pip install -r requirements.txt && python3 build.py`
 
 **Missing styles?**
 - Check `_site/` was generated

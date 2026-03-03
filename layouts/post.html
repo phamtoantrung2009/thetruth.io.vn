@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
@@ -217,7 +217,7 @@
             <h1>{{title}}</h1>
             <div class="meta">
                 <time>{{date}}</time>
-                <div class="tags">{{tags}}</div>
+                <div class="tags">{% for tag in tags %}<span class="tag">{{ tag }}</span>{% endfor %}</div>
             </div>
             
             <div class="content">
@@ -226,12 +226,24 @@
             
             <div class="related-tensions">
                 <h4>Căng Thẳng Liên Quan</h4>
-                {{related}}
+                {% if related_tensions %}
+                {% for item in related_tensions %}
+                <a href="{{ item.href }}">{{ item.name }}</a>
+                {% endfor %}
+                {% else %}
+                <a href="/ten-xo">Xem tất cả căng thẳng</a>
+                {% endif %}
             </div>
             
             <div class="related">
                 <h3>Đọc Tiếp</h3>
-                {{related_articles}}
+                {% if related_articles %}
+                {% for item in related_articles %}
+                <a href="/{{ item.slug }}.html">{{ item.title }}</a>
+                {% endfor %}
+                {% else %}
+                <a href="/phan-tich">Xem tất cả phân tích</a>
+                {% endif %}
             </div>
         </article>
     </main>
@@ -241,3 +253,4 @@
     </footer>
 </body>
 </html>
+

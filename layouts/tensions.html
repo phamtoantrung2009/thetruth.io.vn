@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
@@ -117,7 +117,18 @@
         <h1>Căng Thẳng Hệ Thống</h1>
         <p class="intro">Các căng thẳng cốt lõi định hình thực tại tầng lớp trung lưu Việt Nam. Mỗi căng thẳng có cơ chế. Mỗi căng thẳng có cái giá.</p>
         
-        {{tensions_list}}
+        {% for tension in tensions_list %}
+        <div class="tension" id="{{ tension.id }}">
+            <h2>{{ tension.name }}</h2>
+            <p class="mechanism"><strong>Cơ chế:</strong> {{ tension.mechanism }}</p>
+            <div class="tags">
+                {% for tag in tension.tags %}
+                <span class="tag">{{ tag }}</span>
+                {% endfor %}
+            </div>
+            <a href="/tags/{{ tension.tags[0] }}.html" class="related-link">Xem bài phân tích →</a>
+        </div>
+{% endfor %}
     </main>
 
     <footer>
@@ -125,3 +136,4 @@
     </footer>
 </body>
 </html>
+
