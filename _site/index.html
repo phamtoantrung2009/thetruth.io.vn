@@ -4,11 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>THE TRUTH — Sự Thật Về Thực Tại Việt Nam</title>
-    <meta name="description" content="Sự thật về thực tại tầng lớp trung lưu Việt Nam. Phân tích hệ thống, không phải lời khuyên.">
-    <meta property="og:title" content="THE TRUTH — Sự Thật Về Thực Tại Việt Nam">
-    <meta property="og:description" content="Sự thật về thực tại của tầng lớp trung lưu Việt Nam.">
-    <meta property="og:type" content="website">
-    <link rel="canonical" href="https://thetruth.io.vn">
     <style>
         :root {
             --bg: #0d0d0d;
@@ -31,8 +26,6 @@
             padding: 0 1.5rem 3rem;
         }
         a { color: var(--text); text-decoration: none; }
-        a:hover { color: var(--accent); }
-        
         header { 
             display: flex; 
             justify-content: space-between; 
@@ -41,175 +34,40 @@
             border-bottom: 1px solid var(--border);
             margin-bottom: 2.5rem;
         }
-        .logo { font-size: 1.4rem; font-weight: 700; letter-spacing: -0.02em; }
+        .logo { font-size: 1.4rem; font-weight: 700; }
         .logo span { color: var(--accent); }
-        nav a { 
-            color: var(--text-muted); 
-            margin-left: 1.5rem; 
-            font-size: 0.9rem;
-            transition: color 0.2s;
-        }
-        nav a:hover { color: var(--text); }
+        nav a { color: var(--text-muted); margin-left: 1.5rem; font-size: 0.9rem; }
         
         .hero { margin: 3rem 0 4rem; }
-        .hero h1 { 
-            font-size: 2.6rem; 
-            font-weight: 700; 
-            line-height: 1.1; 
-            margin-bottom: 1rem;
-            letter-spacing: -0.03em;
-        }
-        .hero p { 
-            color: var(--text-muted); 
-            font-size: 1.1rem; 
-            max-width: 540px;
-        }
+        .hero h1 { font-size: 2.6rem; line-height: 1.1; margin-bottom: 1rem; }
         
+        /* TikTok Grid Styles */
         .tiktok-section {
             background: var(--card-bg);
             border: 1px solid var(--border);
             border-radius: 8px;
-            padding: 2rem;
+            padding: 1.5rem;
             margin: 2.5rem 0;
-            text-align: center;
         }
-        .tiktok-section h3 { font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1rem; }
-        .tiktok-placeholder {
-            background: #1a1a1a;
-            border-radius: 6px;
-            padding: 3rem;
-            color: var(--text-muted);
-            font-size: 0.9rem;
-        }
+        .tiktok-section h3 { font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 1.5rem; text-align: center; }
         
         .tiktok-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 1rem;
+            gap: 10px;
         }
         
+        /* Đảm bảo khung nhúng không bị vỡ */
         .tiktok-embed {
-            background: #1a1a1a;
-            border-radius: 6px;
-            padding: 0.75rem;
-            margin: 0;
-            text-align: center;
+            margin: 0 !important;
+            width: 100% !important;
+            min-width: unset !important;
         }
-        
-        .tiktok-embed section {
-            text-align: center;
-        }
-        
-        .tiktok-embed a {
-            color: var(--text-muted);
-            font-size: 0.8rem;
-        }
-        
-        .email-capture {
-            background: linear-gradient(135deg, var(--card-bg) 0%, #1a1a1a 100%);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 2rem;
-            margin: 2.5rem 0;
-        }
-        .email-capture h3 { margin-bottom: 0.5rem; }
-        .email-capture p { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1rem; }
-        .email-form { display: flex; gap: 0.5rem; }
-        .email-form input {
-            flex: 1;
-            background: var(--bg);
-            border: 1px solid var(--border);
-            color: var(--text);
-            padding: 0.75rem 1rem;
-            border-radius: 4px;
-            font-size: 0.95rem;
-        }
-        .email-form input::placeholder { color: var(--text-muted); }
-        .email-form button {
-            background: var(--accent);
-            color: #fff;
-            border: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 4px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-        .email-form button:hover { background: var(--accent-dim); }
-        
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            margin-bottom: 1.5rem;
-            padding-bottom: 0.75rem;
-            border-bottom: 1px solid var(--border);
-        }
-        .section-header h2 { font-size: 1.25rem; font-weight: 600; }
-        .section-header a { color: var(--text-muted); font-size: 0.85rem; }
-        
-        .tensions-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
-            margin: 2rem 0 3rem;
-        }
-        .tension-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            padding: 1.25rem;
-            transition: border-color 0.2s;
-        }
-        .tension-card:hover { border-color: var(--accent); }
-        .tension-card h3 { 
-            font-size: 0.95rem; 
-            font-weight: 600; 
-            margin-bottom: 0.5rem;
-            line-height: 1.3;
-        }
-        .tension-card p { 
-            font-size: 0.8rem; 
-            color: var(--text-muted); 
-        }
-        
-        .posts { list-style: none; }
-        .posts li { margin-bottom: 2rem; }
-        .posts a { display: block; }
-        .posts a:hover h2 { color: var(--accent); }
-        .posts h2 { 
-            font-size: 1.35rem; 
-            font-weight: 600; 
-            margin-bottom: 0.4rem;
-            transition: color 0.2s;
-        }
-        .posts .excerpt { color: #999; font-size: 0.95rem; margin-bottom: 0.5rem; }
-        .posts .meta { color: var(--text-muted); font-size: 0.8rem; }
-        .tag { 
-            display: inline-block; 
-            background: var(--border); 
-            padding: 0.15rem 0.5rem; 
-            border-radius: 3px; 
-            font-size: 0.7rem; 
-            margin-right: 0.4rem;
-        }
-        
-        footer { 
-            margin-top: 4rem; 
-            padding-top: 2rem; 
-            border-top: 1px solid var(--border); 
-            color: var(--text-muted); 
-            font-size: 0.8rem; 
-            text-align: center;
-        }
-        
+
         @media (max-width: 600px) {
-            .hero h1 { font-size: 2rem; }
-            .tensions-grid { grid-template-columns: 1fr; }
-            .email-form { flex-direction: column; }
             .tiktok-grid { grid-template-columns: 1fr; }
         }
+        /* ... (Các CSS còn lại của bạn) ... */
     </style>
 </head>
 <body>
@@ -224,134 +82,48 @@
 
     <section class="hero">
         <h1>Sự thật về thực tại của tầng lớp trung lưu Việt Nam.</h1>
-        <p>Chúng tôi giải mã các lực hệ thống — thu nhập vs tài sản, làm việc vs vốn, ổn định vs Thoát. Không động viên. Để làm rõ.</p>
+        <p>Chúng tôi giải mã các lực hệ thống — thu nhập vs tài sản, làm việc vs vốn, ổn định vs Thoát.</p>
     </section>
 
-    <!-- TikTok Embed Section -->
     <section class="tiktok-section">
-    <h3>Phân Tích Mới Nhất</h3>
-    <div class="tiktok-grid">
-        <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@pepsiman1331/photo/7598511979979984136" data-video-id="7598511979979984136">
-            <section>
-                <a target="_blank" title="@pepsiman1331" href="https://www.tiktok.com/@pepsiman1331/photo/7598511979979984136">@pepsiman1331</a>
-            </section>
-        </blockquote>
+        <h3>Phân Tích Mới Nhất</h3>
+        <div class="tiktok-grid">
+            <blockquote class="tiktok-embed" 
+                cite="https://www.tiktok.com/@pepsiman1331/photo/7598511979979984136" 
+                data-unique-id="pepsiman1331" 
+                data-embed-type="video" 
+                data-video-id="7598511979979984136">
+                <section>
+                    <a target="_blank" href="https://www.tiktok.com/@pepsiman1331/photo/7598511979979984136">@pepsiman1331</a>
+                </section>
+            </blockquote>
 
-        <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@pepsiman1331/photo/7603165751159131400" data-video-id="7603165751159131400">
-            <section>
-                <a target="_blank" title="@pepsiman1331" href="https://www.tiktok.com/@pepsiman1331/photo/7603165751159131400">@pepsiman1331</a>
-            </section>
-        </blockquote>
+            <blockquote class="tiktok-embed" 
+                cite="https://www.tiktok.com/@pepsiman1331/photo/7603165751159131400" 
+                data-unique-id="pepsiman1331" 
+                data-embed-type="video" 
+                data-video-id="7603165751159131400">
+                <section>
+                    <a target="_blank" href="https://www.tiktok.com/@pepsiman1331/photo/7603165751159131400">@pepsiman1331</a>
+                </section>
+            </blockquote>
 
-        <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@pepsiman1331/photo/7595431276203560199" data-video-id="7595431276203560199">
-            <section>
-                <a target="_blank" title="@pepsiman1331" href="https://www.tiktok.com/@pepsiman1331/photo/7595431276203560199">@pepsiman1331</a>
-            </section>
-        </blockquote>
-    </div>
-</section>
-        </blockquote>
-    </div>
-</section>
-    <!-- Email Capture -->
-    <section class="email-capture">
-        <h3>Nhận phân tích hàng tuần</h3>
-        <p>Không động viên. Không hype. Chỉ có sự thật.</p>
-        <form class="email-form" onsubmit="event.preventDefault(); alert('Sắp ra mắt');">
-            <input type="email" placeholder="email@cuaban.com" required>
-            <button type="submit">Đăng ký</button>
-        </form>
-    </section>
-
-    <!-- Tensions Preview -->
-    <section>
-        <div class="section-header">
-            <h2>Căng Thẳng Cốt Lõi</h2>
-            <a href="/ten-xo">Xem tất cả →</a>
+            <blockquote class="tiktok-embed" 
+                cite="https://www.tiktok.com/@pepsiman1331/photo/7595431276203560199" 
+                data-unique-id="pepsiman1331" 
+                data-embed-type="video" 
+                data-video-id="7595431276203560199">
+                <section>
+                    <a target="_blank" href="https://www.tiktok.com/@pepsiman1331/photo/7595431276203560199">@pepsiman1331</a>
+                </section>
+            </blockquote>
         </div>
-        <div class="tensions-grid">
-            <a href="/ten-xo#thu-nhap-vs-tai-san" class="tension-card">
-            <h3>Thu Nhập vs. Nghèo Tài Sản</h3>
-            <p>Lương không tạo tài sản</p>
-        </a>
-<a href="/ten-xo#luong-vs-lam-phat" class="tension-card">
-            <h3>Tăng Lương vs. Lạm Phát</h3>
-            <p>Lương không theo kịp lạm phát tài sản</p>
-        </a>
-<a href="/ten-xo#lam-viec-cap-von" class="tension-card">
-            <h3>Làm Việc Chăm Chỉ vs. Yêu Cầu Vốn</h3>
-            <p>Quan hệ > nỗ lực</p>
-        </a>
-<a href="/ten-xo#nghia-vu-gia-dinh" class="tension-card">
-            <h3>Nghĩa Vụ Gia Đình vs. Tự Chủ</h3>
-            <p>Kinh tế hiếu nghĩa</p>
-        </a>
-<a href="/ten-xo#hien-menh-cha-me" class="tension-card">
-            <h3>Hi Sinh Của Cha Mẹ vs. Đền Đáp</h3>
-            <p>Nợ liên thế hệ</p>
-        </a>
-<a href="/ten-xo#so-sanh-ban-be" class="tension-card">
-            <h3>So Sánh Bạn Bè vs. Đình Trệ</h3>
-            <p>Méo mó mạng xã hội</p>
-        </a>
-        </div>
-    </section>
-
-    <!-- Featured Articles -->
-    <section>
-        <div class="section-header">
-            <h2>Phân Tích Mới Nhất</h2>
-            <a href="/phan-tich">Xem tất cả →</a>
-        </div>
-        <ul class="posts">
-            <li>
-            <a href="/cai-bay-cong-luong-lam-phat-vietnam.html">
-                <h2>"Cái Bẫy Công Lương và Lạm Phát Thực Tế Tại Việt Nam"</h2>
-                <p class="excerpt">"Bạn kiếm 30 triệu/tháng. Bạn vẫn không mua được nhà. Đây là lý do toán học không bao giờ nghiêng về bạn."</p>
-                <div class="meta"><time>"2026-03-02"</time> <span class="tag">thu-nhap</span><span class="tag">lam-phat</span><span class="tag">viec-lam</span><span class="tag">tai-san</span></div>
-            </a>
-        </li>
-<li>
-            <a href="/dau-tu-chung-khoan-crypto-ho-den.html">
-                <h2>"Đầu Tư Chứng Khoán & Crypto: Cuộc Chơi Của Cá Mập Hay Hố Đen Của Trung Lưu?"</h2>
-                <p class="excerpt">"Bạn thấy người khác kiếm tiền từ chứng khoán. Bạn mở tài khoản. Bạn thua. Đây là lý do bạn không bao giờ thắng — và ai đang thực sự thắng."</p>
-                <div class="meta"><time>"2026-03-02"</time> <span class="tag">dau-tu</span><span class="tag">chung-khoan</span><span class="tag">crypto</span><span class="tag">tai-chinh</span></div>
-            </a>
-        </li>
-<li>
-            <a href="/he-thong-giao-duc-dao-tao-cong-nhan.html">
-                <h2>"Hệ Thống Giáo Dục Đang Đào Tạo Công Nhân, Không Phải Chủ Nhân"</h2>
-                <p class="excerpt">"Bạn tốt nghiệp đại học với 3 năm kinh nghiệm thực tập. Bạn vẫn phải đi xin việc như thể chưa từng học. Đây là lý do."</p>
-                <div class="meta"><time>"2026-03-02"</time> <span class="tag">giao-duc</span><span class="tag">viec-lam</span><span class="tag">dao-tao</span><span class="tag">tri-thuc</span></div>
-            </a>
-        </li>
-<li>
-            <a href="/income-vs-assets-vietnam.html">
-                <h2>"Income vs Asset Ownership: The Illusion of the Vietnamese Middle Class"</h2>
-                <p class="excerpt">"You make 30 million VND/month. You still can't own a home. Here's why the math was never designed for you."</p>
-                <div class="meta"><time>"2026-03-01"</time> <span class="tag">income</span><span class="tag">assets</span><span class="tag">housing</span><span class="tag">vietnam-economy</span><span class="tag">middle-class</span></div>
-            </a>
-        </li>
-<li>
-            <a href="/khung-hoang-nam-tinh-ap-luc-tru-cot.html">
-                <h2>"Khủng Hoảng Nam Tính: Áp Lực Trụ Cột và Sự Cô Độc Tuổi 30"</h2>
-                <p class="excerpt">"Bạn 30 tuổi. Bạn là trụ cột gia đình. Bạn là người đàn ông duy nhất trong phòng họp không dám nói mình mệt. Đây là cái giá."</p>
-                <div class="meta"><time>"2026-03-02"</time> <span class="tag">nam-tinh</span><span class="tag">gia-dinh</span><span class="tag">tam-ly</span><span class="tag">xa-hoi</span></div>
-            </a>
-        </li>
-<li>
-            <a href="/tiet-kiem-khong-mua-duoc-nha-pho.html">
-                <h2>"Tại Sao Tiết Kiệm Không Bao Giờ Giúp Bạn Mua Được Nhà Phố"</h2>
-                <p class="excerpt">"Bạn tiết kiệm 10 triệu/tháng. Sau 10 năm, bạn có 1.2 tỷ. Căn nhà bạn nhắm tới giờ là 5 tỷ. Đây là lý do."</p>
-                <div class="meta"><time>"2026-03-02"</time> <span class="tag">tai-san</span><span class="tag">nha-dat</span><span class="tag">tiet-kiem</span><span class="tag">thu-nhap</span></div>
-            </a>
-        </li>
-        </ul>
     </section>
 
     <footer>
         <p>© 2026 THE TRUTH — Giải mã thực tại hệ thống</p>
     </footer>
+
     <script async src="https://www.tiktok.com/embed.js"></script>
 </body>
 </html>
