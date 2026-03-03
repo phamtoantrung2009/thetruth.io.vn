@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-﻿#!/usr/bin/env python3
-"""Static site build pipeline with strict content validation."""
-=======
 #!/usr/bin/env python3
 """Static site build pipeline for knowledge base architecture.
 
@@ -16,7 +12,6 @@ URL structure:
 - /framework/{slug}
 - /letter/{slug}
 """
->>>>>>> 7a95e9e (minimal update)
 
 from __future__ import annotations
 
@@ -41,16 +36,9 @@ OUTPUT_DIR = BASE_DIR / "_site"
 STATIC_DIR = BASE_DIR / "static"
 SITE_URL = os.getenv("SITE_URL", "https://thetruth.io.vn").rstrip("/")
 
-<<<<<<< HEAD
-REQUIRED_FIELDS = ("title", "slug", "excerpt", "date")
-SLUG_PATTERN = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
-FRONTMATTER_RE = re.compile(r"\A---\s*\n(.*?)\n---\s*\n?(.*)\Z", re.DOTALL)
-UNRESOLVED_TEMPLATE_TOKEN_RE = re.compile(r"\{\{\s*[^{}]+\s*\}\}")
-=======
 # Valid content types
 VALID_TYPES = ("post", "pillar", "framework", "letter")
 VALID_STATUS = ("draft", "publish")
->>>>>>> 7a95e9e (minimal update)
 
 # Required front matter fields
 REQUIRED_FIELDS = ("title", "slug", "type", "status", "excerpt", "date")
@@ -67,11 +55,8 @@ class BuildError(RuntimeError):
 class Post:
     title: str
     slug: str
-<<<<<<< HEAD
-=======
-    content_type: str  # post|pillar|framework|letter
-    status: str  # draft|publish
->>>>>>> 7a95e9e (minimal update)
+    content_type: str
+    status: str
     excerpt: str
     published_on: date
     tags: tuple[str, ...]
@@ -79,20 +64,7 @@ class Post:
     source_path: Path
 
     @property
-<<<<<<< HEAD
-    def output_filename(self) -> str:
-        return f"{self.slug}.html"
-
-    @property
-    def route(self) -> str:
-        return f"/{self.output_filename}"
-
-    @property
-    def url(self) -> str:
-        return f"{SITE_URL}{self.route}"
-=======
     def url_path(self) -> str:
-        """Generate clean URL based on content type."""
         return f"/{self.content_type}/{self.slug}"
 
     @property
@@ -102,11 +74,9 @@ class Post:
     @property
     def url(self) -> str:
         return f"{SITE_URL}{self.url_path}"
->>>>>>> 7a95e9e (minimal update)
 
 
 def parse_frontmatter(raw_content: str, source_path: Path) -> tuple[dict[str, Any], str]:
-    """Parse YAML frontmatter and markdown body."""
     match = FRONTMATTER_RE.match(raw_content)
     if not match:
         raise BuildError(f"{source_path}: missing valid YAML frontmatter block")
@@ -123,10 +93,7 @@ def parse_frontmatter(raw_content: str, source_path: Path) -> tuple[dict[str, An
     return parsed, body.strip()
 
 
-<<<<<<< HEAD
-=======
 def validate_type(content_type: str, source_path: Path) -> str:
-    """Validate and normalize content type."""
     normalized = content_type.lower().strip()
     if normalized not in VALID_TYPES:
         raise BuildError(
@@ -136,7 +103,6 @@ def validate_type(content_type: str, source_path: Path) -> str:
 
 
 def validate_status(status: str, source_path: Path) -> str:
-    """Validate and normalize status."""
     normalized = status.lower().strip()
     if normalized not in VALID_STATUS:
         raise BuildError(
@@ -145,7 +111,6 @@ def validate_status(status: str, source_path: Path) -> str:
     return normalized
 
 
->>>>>>> 7a95e9e (minimal update)
 def normalize_tags(raw_tags: Any, source_path: Path) -> tuple[str, ...]:
     if raw_tags is None:
         return tuple()
@@ -190,11 +155,8 @@ def normalize_post(source_path: Path) -> Post:
 
     title = str(frontmatter["title"]).strip()
     slug = str(frontmatter["slug"]).strip().strip("\"'")
-<<<<<<< HEAD
-=======
     content_type = validate_type(frontmatter["type"], source_path)
     status = validate_status(frontmatter["status"], source_path)
->>>>>>> 7a95e9e (minimal update)
     excerpt = str(frontmatter["excerpt"]).strip()
 
     if not title:
@@ -213,11 +175,8 @@ def normalize_post(source_path: Path) -> Post:
     return Post(
         title=title,
         slug=slug,
-<<<<<<< HEAD
-=======
         content_type=content_type,
         status=status,
->>>>>>> 7a95e9e (minimal update)
         excerpt=excerpt,
         published_on=published_on,
         tags=tags,
@@ -227,51 +186,27 @@ def normalize_post(source_path: Path) -> Post:
 
 
 def load_posts() -> list[Post]:
-<<<<<<< HEAD
-    if not CONTENT_DIR.exists():
-        raise BuildError(f"Missing content directory: {CONTENT_DIR}")
-
-    markdown_files = sorted(CONTENT_DIR.glob("*.md"))
-    if not markdown_files:
-        raise BuildError(f"No markdown posts found in {CONTENT_DIR}")
-=======
     if not POSTS_DIR.exists():
         raise BuildError(f"Missing posts directory: {POSTS_DIR}")
 
     markdown_files = sorted(POSTS_DIR.glob("*.md"))
     if not markdown_files:
         raise BuildError(f"No markdown posts found in {POSTS_DIR}")
->>>>>>> 7a95e9e (minimal update)
 
     errors: list[str] = []
     posts: list[Post] = []
 
     for source_path in markdown_files:
         try:
-<<<<<<< HEAD
-            posts.append(normalize_post(source_path))
-=======
             post = normalize_post(source_path)
-            # Only include published posts
             if post.status == "publish":
                 posts.append(post)
->>>>>>> 7a95e9e (minimal update)
         except BuildError as exc:
             errors.append(str(exc))
 
     if errors:
         raise BuildError("\n".join(errors))
 
-<<<<<<< HEAD
-    slug_to_path: dict[str, Path] = {}
-    for post in posts:
-        if post.slug in slug_to_path:
-            raise BuildError(
-                f"Duplicate slug '{post.slug}' in {slug_to_path[post.slug]} and {post.source_path}"
-            )
-        slug_to_path[post.slug] = post.source_path
-=======
-    # Check for duplicate slugs within same type
     slug_to_path: dict[tuple[str, str], Path] = {}
     for post in posts:
         key = (post.content_type, post.slug)
@@ -280,20 +215,15 @@ def load_posts() -> list[Post]:
                 f"Duplicate slug '{post.slug}' for type '{post.content_type}' in {slug_to_path[key]} and {post.source_path}"
             )
         slug_to_path[key] = post.source_path
->>>>>>> 7a95e9e (minimal update)
 
     posts.sort(key=lambda item: (item.published_on, item.slug), reverse=True)
     return posts
 
 
-<<<<<<< HEAD
-=======
 def filter_by_type(posts: list[Post], content_type: str) -> list[Post]:
-    """Filter posts by content type."""
     return [p for p in posts if p.content_type == content_type]
 
 
->>>>>>> 7a95e9e (minimal update)
 def markdown_to_html(markdown_text: str) -> str:
     markdown_text = normalize_internal_links(markdown_text)
     return markdown.markdown(
@@ -304,19 +234,11 @@ def markdown_to_html(markdown_text: str) -> str:
 
 
 def normalize_internal_links(markdown_text: str) -> str:
-    """Rewrite legacy internal routes to current paths before markdown rendering."""
     replacements = {
-<<<<<<< HEAD
-        "/tensions#": "/ten-xo#",
-        "/tensions)": "/ten-xo)",
-        "/articles#": "/phan-tich#",
-        "/articles)": "/phan-tich)",
-=======
         "/tensions#": "/post#",
         "/tensions)": "/post)",
         "/articles#": "/post#",
         "/articles)": "/post)",
->>>>>>> 7a95e9e (minimal update)
     }
     normalized = markdown_text
     for legacy, current in replacements.items():
@@ -336,218 +258,6 @@ def build_tag_index(posts: list[Post]) -> dict[str, list[Post]]:
     return tag_index
 
 
-<<<<<<< HEAD
-def get_all_tension_tags() -> set[str]:
-    tags: set[str] = set()
-    for tension in TENSIONS:
-        tags.update(tension["tags"])
-    return tags
-
-
-def get_tensions_preview() -> list[dict[str, Any]]:
-    return TENSIONS[:6]
-
-
-def get_related_tensions(tags: tuple[str, ...]) -> list[dict[str, str]]:
-    if not tags:
-        return []
-
-    related: list[dict[str, str]] = []
-    seen_ids: set[str] = set()
-
-    for tension in TENSIONS:
-        if tension["id"] in seen_ids:
-            continue
-
-        if any(tag in tension["tags"] for tag in tags):
-            related.append({"name": tension["name"], "href": f"/ten-xo#{tension['id']}"})
-            seen_ids.add(tension["id"])
-
-        if len(related) == 3:
-            break
-
-    return related
-
-
-def get_related_articles(current_post: Post, all_posts: list[Post], limit: int = 3) -> list[Post]:
-    if not current_post.tags:
-        return []
-
-    scored: list[tuple[int, Post]] = []
-    current_tags = set(current_post.tags)
-
-    for candidate in all_posts:
-        if candidate.slug == current_post.slug:
-            continue
-
-        shared = len(current_tags.intersection(candidate.tags))
-        if shared > 0:
-            scored.append((shared, candidate))
-
-    scored.sort(key=lambda item: (item[0], item[1].published_on, item[1].slug), reverse=True)
-    return [post for _, post in scored[:limit]]
-
-
-def clean_output_dir() -> None:
-    if OUTPUT_DIR.exists():
-        shutil.rmtree(OUTPUT_DIR)
-    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-
-
-def copy_static_assets() -> None:
-    if STATIC_DIR.exists():
-        shutil.copytree(STATIC_DIR, OUTPUT_DIR, dirs_exist_ok=True)
-
-
-def render_template(env: Environment, template_name: str, context: dict[str, Any]) -> str:
-    template_path = LAYOUTS_DIR / template_name
-    if not template_path.exists():
-        raise BuildError(f"Missing template: {template_path}")
-
-    template_source = template_path.read_text(encoding="utf-8")
-    template = env.from_string(template_source)
-    rendered = template.render(**context)
-
-    unresolved = UNRESOLVED_TEMPLATE_TOKEN_RE.findall(rendered)
-    if unresolved:
-        raise BuildError(
-            f"Template '{template_name}' rendered with unresolved tokens: {', '.join(sorted(set(unresolved)))}"
-        )
-
-    return rendered
-
-
-def write_output(relative_path: str, html_text: str) -> None:
-    output_path = OUTPUT_DIR / relative_path
-    output_path.parent.mkdir(parents=True, exist_ok=True)
-    output_path.write_text(html_text, encoding="utf-8")
-
-
-def validate_generated_links() -> None:
-    html_files = list(OUTPUT_DIR.rglob("*.html"))
-    existing_paths: set[str] = set()
-    aliases: set[str] = set()
-
-    for file_path in OUTPUT_DIR.rglob("*"):
-        if not file_path.is_file():
-            continue
-
-        rel_path = "/" + file_path.relative_to(OUTPUT_DIR).as_posix()
-        existing_paths.add(rel_path)
-
-        if rel_path.endswith(".html"):
-            aliases.add(rel_path)
-            if rel_path == "/index.html":
-                aliases.add("/")
-            else:
-                aliases.add(rel_path[:-5])
-
-    broken_links: list[str] = []
-    href_re = re.compile(r'href\s*=\s*"([^"]+)"')
-
-    for html_file in html_files:
-        text = html_file.read_text(encoding="utf-8")
-        for href in href_re.findall(text):
-            parsed = urlsplit(href)
-            if parsed.scheme or parsed.netloc:
-                continue
-            if href.startswith(("#", "mailto:", "tel:", "javascript:")):
-                continue
-
-            path = parsed.path or "/"
-            if path not in aliases and path not in existing_paths:
-                broken_links.append(f"{html_file.relative_to(OUTPUT_DIR)} -> {href}")
-
-    if broken_links:
-        details = "\n".join(sorted(set(broken_links)))
-        raise BuildError(f"Broken internal links detected:\n{details}")
-
-
-def build_site() -> None:
-    posts = load_posts()
-    tag_index = build_tag_index(posts)
-    all_tension_tags = get_all_tension_tags()
-    clean_output_dir()
-
-    env = Environment(
-        autoescape=select_autoescape(enabled_extensions=("html",), default_for_string=True),
-        undefined=StrictUndefined,
-        trim_blocks=True,
-        lstrip_blocks=True,
-    )
-
-    # Render individual posts
-    for post in posts:
-        rendered_content = Markup(markdown_to_html(post.body_markdown))
-        related_tensions = get_related_tensions(post.tags)
-        related_articles = get_related_articles(post, posts)
-
-        html_text = render_template(
-            env,
-            "post.html",
-            {
-                "title": post.title,
-                "excerpt": post.excerpt,
-                "date": post.published_on.isoformat(),
-                "tags": post.tags,
-                "content": rendered_content,
-                "url": post.url,
-                "related_tensions": related_tensions,
-                "related_articles": related_articles,
-            },
-        )
-        write_output(post.output_filename, html_text)
-
-    # Core pages
-    write_output(
-        "index.html",
-        render_template(
-            env,
-            "index.html",
-            {
-                "posts": posts,
-                "tensions": get_tensions_preview(),
-                "site_url": SITE_URL,
-            },
-        ),
-    )
-
-    write_output(
-        "phan-tich.html",
-        render_template(env, "articles.html", {"articles": posts, "site_url": SITE_URL}),
-    )
-
-    write_output(
-        "ten-xo.html",
-        render_template(env, "tensions.html", {"tensions_list": TENSIONS, "site_url": SITE_URL}),
-    )
-
-    write_output("ve-he-thong.html", render_template(env, "about.html", {"site_url": SITE_URL}))
-
-    # Tag pages
-    all_tags = sorted(set(tag_index.keys()).union(all_tension_tags))
-    for tag in all_tags:
-        tag_posts = tag_index.get(tag, [])
-        write_output(
-            f"tags/{tag}.html",
-            render_template(
-                env,
-                "articles.html",
-                {
-                    "articles": tag_posts,
-                    "site_url": SITE_URL,
-                    "page_title": f"Tag: {tag}",
-                    "page_subtitle": f"Bai phan tich co tag '{tag}'",
-                },
-            ),
-        )
-
-    copy_static_assets()
-    validate_generated_links()
-
-    print(f"Built {len(posts)} posts to {OUTPUT_DIR}")
-
-=======
 def get_related_posts(current_post: Post, all_posts: list[Post], limit: int = 3) -> list[Post]:
     if not current_post.tags:
         return []
@@ -613,9 +323,8 @@ def validate_generated_links() -> None:
         rel_path = "/" + file_path.relative_to(OUTPUT_DIR).as_posix()
         existing_paths.add(rel_path)
 
-        # Also add clean URL equivalents (e.g., /post/slug/index.html -> /post/slug)
         if rel_path.endswith("/index.html"):
-            clean_path = rel_path[:-10]  # Remove /index.html
+            clean_path = rel_path[:-10]
             existing_paths.add(clean_path)
 
     broken_links: list[str] = []
@@ -631,7 +340,6 @@ def validate_generated_links() -> None:
                 continue
 
             path = parsed.path or "/"
-            # Check for clean URLs (no .html extension)
             clean_path = path if not path.endswith(".html") else path[:-5]
             if clean_path not in existing_paths and path not in existing_paths:
                 broken_links.append(f"{html_file.relative_to(OUTPUT_DIR)} -> {href}")
@@ -646,13 +354,11 @@ def build_site() -> None:
     tag_index = build_tag_index(posts)
     clean_output_dir()
 
-    # Filter posts by type
     pillar_posts = filter_by_type(posts, "pillar")
     framework_posts = filter_by_type(posts, "framework")
     letter_posts = filter_by_type(posts, "letter")
     blog_posts = filter_by_type(posts, "post")
 
-    # Latest 10 posts for homepage
     latest_posts = blog_posts[:10]
 
     env = Environment(
@@ -683,7 +389,7 @@ def build_site() -> None:
         )
         write_output(post.output_filename, html_text)
 
-    # Homepage with new structure
+    # Homepage
     write_output(
         "index.html",
         render_template(
@@ -699,7 +405,7 @@ def build_site() -> None:
         ),
     )
 
-    # Archive pages for each type (at root level: /post/, /pillar/, etc.)
+    # Archive pages
     if blog_posts:
         write_output(
             "post/index.html",
@@ -709,19 +415,14 @@ def build_site() -> None:
                 {
                     "posts": blog_posts,
                     "content_type": "post",
-                    "type_label": "Bài Phân Tích",
+                    "type_label": "Bai Phan Tich",
                     "site_url": SITE_URL,
                 },
-        # Also create redirect from /post to /post/
             ),
         )
         write_output(
             "post.html",
-            render_template(
-                env,
-                "redirect.html",
-                {"redirect_url": "/post/"},
-            ),
+            render_template(env, "redirect.html", {"redirect_url": "/post/"}),
         )
 
     if pillar_posts:
@@ -733,18 +434,14 @@ def build_site() -> None:
                 {
                     "posts": pillar_posts,
                     "content_type": "pillar",
-                    "type_label": "Trụ Cột",
+                    "type_label": "Tru Cot",
                     "site_url": SITE_URL,
                 },
             ),
         )
         write_output(
             "pillar.html",
-            render_template(
-                env,
-                "redirect.html",
-                {"redirect_url": "/pillar/"},
-            ),
+            render_template(env, "redirect.html", {"redirect_url": "/pillar/"}),
         )
 
     if framework_posts:
@@ -763,11 +460,7 @@ def build_site() -> None:
         )
         write_output(
             "framework.html",
-            render_template(
-                env,
-                "redirect.html",
-                {"redirect_url": "/framework/"},
-            ),
+            render_template(env, "redirect.html", {"redirect_url": "/framework/"}),
         )
 
     if letter_posts:
@@ -779,18 +472,14 @@ def build_site() -> None:
                 {
                     "posts": letter_posts,
                     "content_type": "letter",
-                    "type_label": "Thư",
+                    "type_label": "Thu",
                     "site_url": SITE_URL,
                 },
             ),
         )
         write_output(
             "letter.html",
-            render_template(
-                env,
-                "redirect.html",
-                {"redirect_url": "/letter/"},
-            ),
+            render_template(env, "redirect.html", {"redirect_url": "/letter/"}),
         )
 
     # Tag pages
@@ -806,7 +495,7 @@ def build_site() -> None:
                     "posts": tag_posts,
                     "content_type": "post",
                     "page_title": f"Tag: {tag}",
-                    "type_label": "Bài viết",
+                    "type_label": "Bai viet",
                     "site_url": SITE_URL,
                 },
             ),
@@ -814,19 +503,15 @@ def build_site() -> None:
 
     copy_static_assets()
 
-    # Backward compatibility redirects for old URLs
+    # Legacy redirects
     legacy_redirects = [
         ("ten-xo.html", "/post"),
         ("phan-tich.html", "/post"),
         ("ve-he-thong.html", "/post"),
     ]
     for old_file, new_url in legacy_redirects:
-        write_output(
-            old_file,
-            render_template(env, "redirect.html", {"redirect_url": new_url}),
-        )
+        write_output(old_file, render_template(env, "redirect.html", {"redirect_url": new_url}))
 
-    # Temporarily disabled during transition from old URL structure
     # validate_generated_links()
 
     print(f"Built {len(posts)} posts to {OUTPUT_DIR}")
@@ -835,7 +520,6 @@ def build_site() -> None:
     print(f"  - {len(letter_posts)} letters")
     print(f"  - {len(blog_posts)} posts")
 
->>>>>>> 7a95e9e (minimal update)
 
 if __name__ == "__main__":
     try:
