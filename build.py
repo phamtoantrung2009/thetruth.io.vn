@@ -31,18 +31,18 @@ UNRESOLVED_TEMPLATE_TOKEN_RE = re.compile(r"\{\{\s*[^{}]+\s*\}\}")
 
 # Tension data (Vietnamese)
 TENSIONS = [
-    {"id": "thu-nhap-vs-tai-san", "name": "Thu Nháº­p vs. NghÃ¨o TÃ i Sáº£n", "mechanism": "LÆ°Æ¡ng khÃ´ng táº¡o tÃ i sáº£n", "tags": ["thu-nhap", "tai-san", "cuong-luong"]},
-    {"id": "luong-vs-lam-phat", "name": "TÄƒng LÆ°Æ¡ng vs. Láº¡m PhÃ¡t", "mechanism": "LÆ°Æ¡ng khÃ´ng theo ká»‹p láº¡m phÃ¡t tÃ i sáº£n", "tags": ["thu-nhap", "lam-phat"]},
-    {"id": "lam-viec-cap-von", "name": "LÃ m Viá»‡c ChÄƒm Chá»‰ vs. YÃªu Cáº§u Vá»‘n", "mechanism": "Quan há»‡ > ná»— lá»±c", "tags": ["cong-viec", "co-hoi"]},
-    {"id": "nghia-vu-gia-dinh", "name": "NghÄ©a Vá»¥ Gia ÄÃ¬nh vs. Tá»± Chá»§", "mechanism": "Kinh táº¿ hiáº¿u nghÄ©a", "tags": ["gia-dinh", "nghia-vu"]},
-    {"id": "hien-menh-cha-me", "name": "Hi Sinh Cá»§a Cha Máº¹ vs. Äá»n ÄÃ¡p", "mechanism": "Ná»£ liÃªn tháº¿ há»‡", "tags": ["gia-dinh", "hien-menh"]},
-    {"id": "so-sanh-ban-be", "name": "So SÃ¡nh Báº¡n BÃ¨ vs. ÄÃ¬nh Trá»‡", "mechanism": "MÃ©o mÃ³ máº¡ng xÃ£ há»™i", "tags": ["xa-hoi", "so-sanh"]},
-    {"id": "vi-tri-c-dinh", "name": "CÆ¡ Há»™i ÄÃ´ Thá»‹ vs. Káº¹t Gia ÄÃ¬nh", "mechanism": "Táº­p trung Ä‘Ã´ thá»‹", "tags": ["vi-tri", "di-cu"]},
-    {"id": "on-dinh-ry", "name": "á»”n Äá»‹nh vs. Rá»§i Ro", "mechanism": "TÆ° duy sinh tá»“n", "tags": ["rui-ro", "an-toan"]},
-    {"id": "so-huu-thue", "name": "Sá»Ÿ Há»¯u vs. ThuÃª Trá»", "mechanism": "Láº¡m phÃ¡t báº¥t Ä‘á»™ng sáº£n", "tags": ["nha-dat", "so-huu"]},
-    {"id": "danh-du-chu-thuc", "name": "Danh Dá»± vs. ChÃ¢n Thá»±c", "mechanism": "Vá»‘n xÃ£ há»™i", "tags": ["ban-sac", "danh-du"]},
-    {"id": "tre-trong-kinh-nghiem", "name": "TÃ´n Thá» Tuá»•i Tráº» vs. TrÃ­ Tuá»‡", "mechanism": "PhÃ¢n biá»‡t tuá»•i tÃ¡c", "tags": ["tuoi", "kinh-nghiem"]},
-    {"id": "thong-tin-qua-tai", "name": "ThÃ´ng Tin QuÃ¡ Táº£i vs. RÃµ RÃ ng", "mechanism": "QuÃ¡ táº£i lá»i khuyÃªn", "tags": ["thong-tin", "loi-khuyen"]},
+    {"id": "thu-nhap-vs-tai-san", "name": "Thu Nhập vs. Nghèo Tài Sản", "mechanism": "Lương không tạo tài sản", "tags": ["thu-nhap", "tai-san", "cuong-luong"]},
+    {"id": "luong-vs-lam-phat", "name": "Tăng Lương vs. Lạm Phát", "mechanism": "Lương không theo kịp lạm phát tài sản", "tags": ["thu-nhap", "lam-phat"]},
+    {"id": "lam-viec-cap-von", "name": "Làm Việc Chăm Chỉ vs. Yêu Cầu Vốn", "mechanism": "Quan hệ > nỗ lực", "tags": ["cong-viec", "co-hoi"]},
+    {"id": "nghia-vu-gia-dinh", "name": "Nghĩa Vụ Gia Đình vs. Tự Chủ", "mechanism": "Kinh tế hiếu nghĩa", "tags": ["gia-dinh", "nghia-vu"]},
+    {"id": "hien-menh-cha-me", "name": "Hi Sinh Của Cha Mẹ vs. Đền Đáp", "mechanism": "Nợ liên thế hệ", "tags": ["gia-dinh", "hien-menh"]},
+    {"id": "so-sanh-ban-be", "name": "So Sánh Bạn Bè vs. Đình Trệ", "mechanism": "Méo mó mạng xã hội", "tags": ["xa-hoi", "so-sanh"]},
+    {"id": "vi-tri-c-dinh", "name": "Cơ Hội Đô Thị vs. Kẹt Gia Đình", "mechanism": "Tập trung đô thị", "tags": ["vi-tri", "di-cu"]},
+    {"id": "on-dinh-ry", "name": "Ổn Định vs. Rủi Ro", "mechanism": "Tư duy sinh tồn", "tags": ["rui-ro", "an-toan"]},
+    {"id": "so-huu-thue", "name": "Sở Hữu vs. Thuê Trọ", "mechanism": "Lạm phát bất động sản", "tags": ["nha-dat", "so-huu"]},
+    {"id": "danh-du-chu-thuc", "name": "Danh Dự vs. Chân Thực", "mechanism": "Vốn xã hội", "tags": ["ban-sac", "danh-du"]},
+    {"id": "tre-trong-kinh-nghiem", "name": "Tôn Thờ Tuổi Trẻ vs. Trí Tuệ", "mechanism": "Phân biệt tuổi tác", "tags": ["tuoi", "kinh-nghiem"]},
+    {"id": "thong-tin-qua-tai", "name": "Thông Tin Quá Tải vs. Rõ Ràng", "mechanism": "Quá tải lời khuyên", "tags": ["thong-tin", "loi-khuyen"]},
 ]
 
 
