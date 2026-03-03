@@ -1,12 +1,12 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>THE TRUTH — Sự Thật Về Thực Tại Việt Nam</title>
-    <meta name="description" content="Sự thật về thực tại tầng lớp trung lưu Việt Nam. Phân tích hệ thống, không phải lời khuyên.">
-    <meta property="og:title" content="THE TRUTH — Sự Thật Về Thực Tại Việt Nam">
-    <meta property="og:description" content="Sự thật về thực tại của tầng lớp trung lưu Việt Nam.">
+    <title>THE TRUTH — Su That Ve Thuc Tai Viet Nam</title>
+    <meta name="description" content="Su that ve thuc tai tang lop trung luu Viet Nam. Phan tich he thong, khong phai loi khuyen.">
+    <meta property="og:title" content="THE TRUTH — Su That Ve Thuc Tai Viet Nam">
+    <meta property="og:description" content="Su that ve thuc tai cua tang lop trung luu Viet Nam.">
     <meta property="og:type" content="website">
     <link rel="canonical" href="https://thetruth.io.vn">
     <style>
@@ -191,65 +191,50 @@
     <header>
         <a href="/" class="logo">THE TRUTH<span>.</span></a>
         <nav>
-            <a href="/post">Bài phân tích</a>
-            <a href="/pillar">Trụ cột</a>
+            <a href="/post">Bai phan tich</a>
+            <a href="/pillar">Tru cot</a>
             <a href="/framework">Khung</a>
-            <a href="/letter">Thư</a>
+            <a href="/letter">Thu</a>
         </nav>
     </header>
 
-    <!-- Intro Statement -->
     <section class="intro">
-        <h1>Sự thật về thực tại của tầng lớp trung lưu Việt Nam.</h1>
-        <p>Chúng tôi giải mã các lực hệ thống — thu nhập vs tài sản, làm việc vs vốn, ổn định vs Thoát. Không động viên. Để làm rõ.</p>
+        <h1>Su that ve thuc tai cua tang lop trung luu Viet Nam.</h1>
+        <p>Chung toi giai ma cac luc he thong — thu nhap vs tai san, lam viec vs von, on dinh vs Thoat. Khong dong vi. De lam ro.</p>
     </section>
-<<<<<<< HEAD
-=======
 
->>>>>>> 7a95e9e (minimal update)
-    <!-- Email Capture -->
     <section class="email-capture">
-        <h3>Nhận phân tích hàng tuần</h3>
-        <p>Không động viên. Không hype. Chỉ có sự thật.</p>
-        <form class="email-form" onsubmit="event.preventDefault(); alert('Sắp ra mắt');">
+        <h3>Nhan phan tich hang tuan</h3>
+        <p>Khong dong vi. Khong hype. Chi co su that.</p>
+        <form class="email-form" onsubmit="event.preventDefault(); alert('Sap ra mat');">
             <input type="email" placeholder="email@cuaban.com" required>
-            <button type="submit">Đăng ký</button>
+            <button type="submit">Dang ky</button>
         </form>
     </section>
 
-    <!-- Pillars (type=pillar) -->
     {% if pillars %}
     <section class="section">
         <div class="section-header">
-            <h2>Trụ Cột</h2>
-            <a href="/pillar">Xem tất cả →</a>
+            <h2>Tru Cot</h2>
+            <a href="/pillar">Xem tat ca →</a>
         </div>
-<<<<<<< HEAD
-        <div class="tensions-grid">
-            {% for tension in tensions %}
-            <a href="/ten-xo#{{ tension.id }}" class="tension-card">
-                <h3>{{ tension.name }}</h3>
-                <p>{{ tension.mechanism }}</p>
-=======
         <div class="card-grid">
             {% for post in pillars %}
             <a href="{{ post.url_path }}" class="card">
-                <span class="type-badge">Trụ cột</span>
+                <span class="type-badge">Tru cot</span>
                 <h3>{{ post.title }}</h3>
                 <p>{{ post.excerpt }}</p>
->>>>>>> 7a95e9e (minimal update)
             </a>
             {% endfor %}
         </div>
     </section>
     {% endif %}
 
-    <!-- Frameworks (type=framework) -->
     {% if frameworks %}
     <section class="section">
         <div class="section-header">
-            <h2>Khung Phân Tích</h2>
-            <a href="/framework">Xem tất cả →</a>
+            <h2>Khung Phan Tich</h2>
+            <a href="/framework">Xem tat ca →</a>
         </div>
         <div class="card-grid">
             {% for post in frameworks %}
@@ -263,11 +248,10 @@
     </section>
     {% endif %}
 
-    <!-- Latest 10 Posts (type=post) -->
     <section class="section">
         <div class="section-header">
-            <h2>Bài Phân Tích Mới Nhất</h2>
-            <a href="/post">Xem tất cả →</a>
+            <h2>Bai Phan Tich Moi Nhat</h2>
+            <a href="/post">Xem tat ca →</a>
         </div>
         {% if latest_posts %}
         <ul class="posts">
@@ -287,37 +271,24 @@
             {% endfor %}
         </ul>
         {% else %}
-        <p class="empty-state">Chưa có bài phân tích nào.</p>
+        <p class="empty-state">Chua co bai phan tich nao.</p>
         {% endif %}
     </section>
 
-    <!-- Letters (type=letter) - Optional preview -->
     {% if letters %}
     <section class="section">
         <div class="section-header">
-            <h2>Thư</h2>
-            <a href="/letter">Xem tất cả →</a>
+            <h2>Thu</h2>
+            <a href="/letter">Xem tat ca →</a>
         </div>
         <ul class="posts">
-<<<<<<< HEAD
-            {% for post in posts %}
-            <li>
-                <a href="/{{ post.slug }}.html">
-=======
             {% for post in letters[:3] %}
             <li>
                 <a href="{{ post.url_path }}">
->>>>>>> 7a95e9e (minimal update)
                     <h2>{{ post.title }}</h2>
                     <p class="excerpt">{{ post.excerpt }}</p>
                     <div class="meta">
                         <time>{{ post.published_on.isoformat() }}</time>
-<<<<<<< HEAD
-                        {% for tag in post.tags %}
-                        <span class="tag">{{ tag }}</span>
-                        {% endfor %}
-=======
->>>>>>> 7a95e9e (minimal update)
                     </div>
                 </a>
             </li>
@@ -327,9 +298,7 @@
     {% endif %}
 
     <footer>
-        <p>© 2026 THE TRUTH — Giải mã thực tại hệ thống</p>
+        <p>© 2026 THE TRUTH — Giai ma thuc tai he thong</p>
     </footer>
 </body>
 </html>
-
-

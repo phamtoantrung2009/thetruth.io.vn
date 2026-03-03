@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
@@ -164,57 +164,16 @@
     <header>
         <a href="/" class="logo">THE TRUTH<span>.</span></a>
         <nav>
-            <a href="/post">Bài phân tích</a>
-            <a href="/pillar">Trụ cột</a>
+            <a href="/post">Bai phan tich</a>
+            <a href="/pillar">Tru cot</a>
             <a href="/framework">Khung</a>
-            <a href="/letter">Thư</a>
+            <a href="/letter">Thu</a>
         </nav>
     </header>
 
-<<<<<<< HEAD
-    <main>
-        <article>
-            <div class="hook">
-                <p>{{excerpt}}</p>
-            </div>
-            
-            <h1>{{title}}</h1>
-            <div class="meta">
-                <time>{{date}}</time>
-                <div class="tags">{% for tag in tags %}<span class="tag">{{ tag }}</span>{% endfor %}</div>
-            </div>
-            
-            <div class="content">
-                {{content}}
-            </div>
-            
-            <div class="related-tensions">
-                <h4>Căng Thẳng Liên Quan</h4>
-                {% if related_tensions %}
-                {% for item in related_tensions %}
-                <a href="{{ item.href }}">{{ item.name }}</a>
-                {% endfor %}
-                {% else %}
-                <a href="/ten-xo">Xem tất cả căng thẳng</a>
-                {% endif %}
-            </div>
-            
-            <div class="related">
-                <h3>Đọc Tiếp</h3>
-                {% if related_articles %}
-                {% for item in related_articles %}
-                <a href="/{{ item.slug }}.html">{{ item.title }}</a>
-                {% endfor %}
-                {% else %}
-                <a href="/phan-tich">Xem tất cả phân tích</a>
-                {% endif %}
-            </div>
-        </article>
-    </main>
-=======
     <article>
         <div class="breadcrumb">
-            <a href="/">Trang chủ</a> / 
+            <a href="/">Trang chu</a> / 
             <a href="/{{ content_type }}">{{ content_type }}</a>
         </div>
         
@@ -233,7 +192,7 @@
         
         {% if related_posts %}
         <div class="related">
-            <h3>Bài viết liên quan</h3>
+            <h3>Bai viet lien quan</h3>
             <ul>
                 {% for post in related_posts %}
                 <li><a href="{{ post.url_path }}">{{ post.title }}</a></li>
@@ -242,11 +201,9 @@
         </div>
         {% endif %}
     </article>
->>>>>>> 7a95e9e (minimal update)
 
     <footer>
-        <p>© 2026 THE TRUTH — Giải mã thực tại hệ thống</p>
+        <p>© 2026 THE TRUTH — Giai ma thuc tai he thong</p>
     </footer>
 </body>
 </html>
-
