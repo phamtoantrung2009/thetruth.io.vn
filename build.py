@@ -194,11 +194,26 @@ def load_posts() -> list[Post]:
 
 
 def markdown_to_html(markdown_text: str) -> str:
+    markdown_text = normalize_internal_links(markdown_text)
     return markdown.markdown(
         markdown_text,
         extensions=["extra", "sane_lists", "smarty"],
         output_format="html5",
     )
+
+
+def normalize_internal_links(markdown_text: str) -> str:
+    """Rewrite legacy internal routes to current paths before markdown rendering."""
+    replacements = {
+        "/tensions#": "/ten-xo#",
+        "/tensions)": "/ten-xo)",
+        "/articles#": "/phan-tich#",
+        "/articles)": "/phan-tich)",
+    }
+    normalized = markdown_text
+    for legacy, current in replacements.items():
+        normalized = normalized.replace(legacy, current)
+    return normalized
 
 
 def build_tag_index(posts: list[Post]) -> dict[str, list[Post]]:
@@ -211,6 +226,13 @@ def build_tag_index(posts: list[Post]) -> dict[str, list[Post]]:
         tag_posts.sort(key=lambda item: (item.published_on, item.slug), reverse=True)
 
     return tag_index
+
+
+def get_all_tension_tags() -> set[str]:
+    tags: set[str] = set()
+    for tension in TENSIONS:
+        tags.update(tension["tags"])
+    return tags
 
 
 def get_tensions_preview() -> list[dict[str, Any]]:
@@ -335,6 +357,7 @@ def validate_generated_links() -> None:
 def build_site() -> None:
     posts = load_posts()
     tag_index = build_tag_index(posts)
+    all_tension_tags = get_all_tension_tags()
     clean_output_dir()
 
     env = Environment(
@@ -393,7 +416,9 @@ def build_site() -> None:
     write_output("ve-he-thong.html", render_template(env, "about.html", {"site_url": SITE_URL}))
 
     # Tag pages
-    for tag, tag_posts in tag_index.items():
+    all_tags = sorted(set(tag_index.keys()).union(all_tension_tags))
+    for tag in all_tags:
+        tag_posts = tag_index.get(tag, [])
         write_output(
             f"tags/{tag}.html",
             render_template(
