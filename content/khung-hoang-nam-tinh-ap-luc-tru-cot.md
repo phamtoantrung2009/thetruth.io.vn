@@ -1,8 +1,6 @@
 ---
 title: "Khủng Hoảng Nam Tính: Áp Lực Trụ Cột và Sự Cô Độc Tuổi 30"
 slug: "khung-hoang-nam-tinh-ap-luc-tru-cot"
-type: "post"
-status: "publish"
 excerpt: "Bạn 30 tuổi. Bạn là trụ cột gia đình. Bạn là người đàn ông duy nhất trong phòng họp không dám nói mình mệt. Đây là cái giá."
 tags: ["nam-tinh", "gia-dinh", "tam-ly", "xa-hoi"]
 date: "2026-03-02"

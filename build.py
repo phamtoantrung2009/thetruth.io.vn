@@ -1,17 +1,5 @@
-#!/usr/bin/env python3
-"""Static site build pipeline for knowledge base architecture.
-
-Content model:
-- type: post | pillar | framework | letter
-- status: draft | publish
-- Only files with status=publish are generated
-
-URL structure:
-- /post/{slug}
-- /pillar/{slug}
-- /framework/{slug}
-- /letter/{slug}
-"""
+﻿#!/usr/bin/env python3
+"""Static site build pipeline with strict content validation."""
 
 from __future__ import annotations
 
@@ -30,21 +18,32 @@ from jinja2 import Environment, StrictUndefined, select_autoescape
 from markupsafe import Markup
 
 BASE_DIR = Path(__file__).parent.resolve()
-POSTS_DIR = BASE_DIR / "posts"
+CONTENT_DIR = BASE_DIR / "content"
 LAYOUTS_DIR = BASE_DIR / "layouts"
 OUTPUT_DIR = BASE_DIR / "_site"
 STATIC_DIR = BASE_DIR / "static"
 SITE_URL = os.getenv("SITE_URL", "https://thetruth.io.vn").rstrip("/")
 
-# Valid content types
-VALID_TYPES = ("post", "pillar", "framework", "letter")
-VALID_STATUS = ("draft", "publish")
-
-# Required front matter fields
-REQUIRED_FIELDS = ("title", "slug", "type", "status", "excerpt", "date")
+REQUIRED_FIELDS = ("title", "slug", "excerpt", "date")
 SLUG_PATTERN = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 FRONTMATTER_RE = re.compile(r"\A---\s*\n(.*?)\n---\s*\n?(.*)\Z", re.DOTALL)
 UNRESOLVED_TEMPLATE_TOKEN_RE = re.compile(r"\{\{\s*[^{}]+\s*\}\}")
+
+# Tension data (Vietnamese)
+TENSIONS = [
+    {"id": "thu-nhap-vs-tai-san", "name": "Thu Nhập vs. Nghèo Tài Sản", "mechanism": "Lương không tạo tài sản", "tags": ["thu-nhap", "tai-san", "cuong-luong"]},
+    {"id": "luong-vs-lam-phat", "name": "Tăng Lương vs. Lạm Phát", "mechanism": "Lương không theo kịp lạm phát tài sản", "tags": ["thu-nhap", "lam-phat"]},
+    {"id": "lam-viec-cap-von", "name": "Làm Việc Chăm Chỉ vs. Yêu Cầu Vốn", "mechanism": "Quan hệ > nỗ lực", "tags": ["cong-viec", "co-hoi"]},
+    {"id": "nghia-vu-gia-dinh", "name": "Nghĩa Vụ Gia Đình vs. Tự Chủ", "mechanism": "Kinh tế hiếu nghĩa", "tags": ["gia-dinh", "nghia-vu"]},
+    {"id": "hien-menh-cha-me", "name": "Hi Sinh Của Cha Mẹ vs. Đền Đáp", "mechanism": "Nợ liên thế hệ", "tags": ["gia-dinh", "hien-menh"]},
+    {"id": "so-sanh-ban-be", "name": "So Sánh Bạn Bè vs. Đình Trệ", "mechanism": "Méo mó mạng xã hội", "tags": ["xa-hoi", "so-sanh"]},
+    {"id": "vi-tri-c-dinh", "name": "Cơ Hội Đô Thị vs. Kẹt Gia Đình", "mechanism": "Tập trung đô thị", "tags": ["vi-tri", "di-cu"]},
+    {"id": "on-dinh-ry", "name": "Ổn Định vs. Rủi Ro", "mechanism": "Tư duy sinh tồn", "tags": ["rui-ro", "an-toan"]},
+    {"id": "so-huu-thue", "name": "Sở Hữu vs. Thuê Trọ", "mechanism": "Lạm phát bất động sản", "tags": ["nha-dat", "so-huu"]},
+    {"id": "danh-du-chu-thuc", "name": "Danh Dự vs. Chân Thực", "mechanism": "Vốn xã hội", "tags": ["ban-sac", "danh-du"]},
+    {"id": "tre-trong-kinh-nghiem", "name": "Tôn Thờ Tuổi Trẻ vs. Trí Tuệ", "mechanism": "Phân biệt tuổi tác", "tags": ["tuoi", "kinh-nghiem"]},
+    {"id": "thong-tin-qua-tai", "name": "Thông Tin Quá Tải vs. Rõ Ràng", "mechanism": "Quá tải lời khuyên", "tags": ["thong-tin", "loi-khuyen"]},
+]
 
 
 class BuildError(RuntimeError):
@@ -55,8 +54,6 @@ class BuildError(RuntimeError):
 class Post:
     title: str
     slug: str
-    content_type: str
-    status: str
     excerpt: str
     published_on: date
     tags: tuple[str, ...]
@@ -64,19 +61,20 @@ class Post:
     source_path: Path
 
     @property
-    def url_path(self) -> str:
-        return f"/{self.content_type}/{self.slug}"
+    def output_filename(self) -> str:
+        return f"{self.slug}.html"
 
     @property
-    def output_filename(self) -> str:
-        return f"{self.content_type}/{self.slug}/index.html"
+    def route(self) -> str:
+        return f"/{self.output_filename}"
 
     @property
     def url(self) -> str:
-        return f"{SITE_URL}{self.url_path}"
+        return f"{SITE_URL}{self.route}"
 
 
 def parse_frontmatter(raw_content: str, source_path: Path) -> tuple[dict[str, Any], str]:
+    """Parse YAML frontmatter and markdown body."""
     match = FRONTMATTER_RE.match(raw_content)
     if not match:
         raise BuildError(f"{source_path}: missing valid YAML frontmatter block")
@@ -91,24 +89,6 @@ def parse_frontmatter(raw_content: str, source_path: Path) -> tuple[dict[str, An
         raise BuildError(f"{source_path}: frontmatter must parse to a key/value mapping")
 
     return parsed, body.strip()
-
-
-def validate_type(content_type: str, source_path: Path) -> str:
-    normalized = content_type.lower().strip()
-    if normalized not in VALID_TYPES:
-        raise BuildError(
-            f"{source_path}: invalid type '{content_type}'. Must be one of: {', '.join(VALID_TYPES)}"
-        )
-    return normalized
-
-
-def validate_status(status: str, source_path: Path) -> str:
-    normalized = status.lower().strip()
-    if normalized not in VALID_STATUS:
-        raise BuildError(
-            f"{source_path}: invalid status '{status}'. Must be one of: {', '.join(VALID_STATUS)}"
-        )
-    return normalized
 
 
 def normalize_tags(raw_tags: Any, source_path: Path) -> tuple[str, ...]:
@@ -155,8 +135,6 @@ def normalize_post(source_path: Path) -> Post:
 
     title = str(frontmatter["title"]).strip()
     slug = str(frontmatter["slug"]).strip().strip("\"'")
-    content_type = validate_type(frontmatter["type"], source_path)
-    status = validate_status(frontmatter["status"], source_path)
     excerpt = str(frontmatter["excerpt"]).strip()
 
     if not title:
@@ -175,8 +153,6 @@ def normalize_post(source_path: Path) -> Post:
     return Post(
         title=title,
         slug=slug,
-        content_type=content_type,
-        status=status,
         excerpt=excerpt,
         published_on=published_on,
         tags=tags,
@@ -186,42 +162,35 @@ def normalize_post(source_path: Path) -> Post:
 
 
 def load_posts() -> list[Post]:
-    if not POSTS_DIR.exists():
-        raise BuildError(f"Missing posts directory: {POSTS_DIR}")
+    if not CONTENT_DIR.exists():
+        raise BuildError(f"Missing content directory: {CONTENT_DIR}")
 
-    markdown_files = sorted(POSTS_DIR.glob("*.md"))
+    markdown_files = sorted(CONTENT_DIR.glob("*.md"))
     if not markdown_files:
-        raise BuildError(f"No markdown posts found in {POSTS_DIR}")
+        raise BuildError(f"No markdown posts found in {CONTENT_DIR}")
 
     errors: list[str] = []
     posts: list[Post] = []
 
     for source_path in markdown_files:
         try:
-            post = normalize_post(source_path)
-            if post.status == "publish":
-                posts.append(post)
+            posts.append(normalize_post(source_path))
         except BuildError as exc:
             errors.append(str(exc))
 
     if errors:
         raise BuildError("\n".join(errors))
 
-    slug_to_path: dict[tuple[str, str], Path] = {}
+    slug_to_path: dict[str, Path] = {}
     for post in posts:
-        key = (post.content_type, post.slug)
-        if key in slug_to_path:
+        if post.slug in slug_to_path:
             raise BuildError(
-                f"Duplicate slug '{post.slug}' for type '{post.content_type}' in {slug_to_path[key]} and {post.source_path}"
+                f"Duplicate slug '{post.slug}' in {slug_to_path[post.slug]} and {post.source_path}"
             )
-        slug_to_path[key] = post.source_path
+        slug_to_path[post.slug] = post.source_path
 
     posts.sort(key=lambda item: (item.published_on, item.slug), reverse=True)
     return posts
-
-
-def filter_by_type(posts: list[Post], content_type: str) -> list[Post]:
-    return [p for p in posts if p.content_type == content_type]
 
 
 def markdown_to_html(markdown_text: str) -> str:
@@ -234,11 +203,12 @@ def markdown_to_html(markdown_text: str) -> str:
 
 
 def normalize_internal_links(markdown_text: str) -> str:
+    """Rewrite legacy internal routes to current paths before markdown rendering."""
     replacements = {
-        "/tensions#": "/post#",
-        "/tensions)": "/post)",
-        "/articles#": "/post#",
-        "/articles)": "/post)",
+        "/tensions#": "/ten-xo#",
+        "/tensions)": "/ten-xo)",
+        "/articles#": "/phan-tich#",
+        "/articles)": "/phan-tich)",
     }
     normalized = markdown_text
     for legacy, current in replacements.items():
@@ -258,7 +228,39 @@ def build_tag_index(posts: list[Post]) -> dict[str, list[Post]]:
     return tag_index
 
 
-def get_related_posts(current_post: Post, all_posts: list[Post], limit: int = 3) -> list[Post]:
+def get_all_tension_tags() -> set[str]:
+    tags: set[str] = set()
+    for tension in TENSIONS:
+        tags.update(tension["tags"])
+    return tags
+
+
+def get_tensions_preview() -> list[dict[str, Any]]:
+    return TENSIONS[:6]
+
+
+def get_related_tensions(tags: tuple[str, ...]) -> list[dict[str, str]]:
+    if not tags:
+        return []
+
+    related: list[dict[str, str]] = []
+    seen_ids: set[str] = set()
+
+    for tension in TENSIONS:
+        if tension["id"] in seen_ids:
+            continue
+
+        if any(tag in tension["tags"] for tag in tags):
+            related.append({"name": tension["name"], "href": f"/ten-xo#{tension['id']}"})
+            seen_ids.add(tension["id"])
+
+        if len(related) == 3:
+            break
+
+    return related
+
+
+def get_related_articles(current_post: Post, all_posts: list[Post], limit: int = 3) -> list[Post]:
     if not current_post.tags:
         return []
 
@@ -266,7 +268,7 @@ def get_related_posts(current_post: Post, all_posts: list[Post], limit: int = 3)
     current_tags = set(current_post.tags)
 
     for candidate in all_posts:
-        if candidate.slug == current_post.slug and candidate.content_type == current_post.content_type:
+        if candidate.slug == current_post.slug:
             continue
 
         shared = len(current_tags.intersection(candidate.tags))
@@ -315,6 +317,7 @@ def write_output(relative_path: str, html_text: str) -> None:
 def validate_generated_links() -> None:
     html_files = list(OUTPUT_DIR.rglob("*.html"))
     existing_paths: set[str] = set()
+    aliases: set[str] = set()
 
     for file_path in OUTPUT_DIR.rglob("*"):
         if not file_path.is_file():
@@ -323,9 +326,12 @@ def validate_generated_links() -> None:
         rel_path = "/" + file_path.relative_to(OUTPUT_DIR).as_posix()
         existing_paths.add(rel_path)
 
-        if rel_path.endswith("/index.html"):
-            clean_path = rel_path[:-10]
-            existing_paths.add(clean_path)
+        if rel_path.endswith(".html"):
+            aliases.add(rel_path)
+            if rel_path == "/index.html":
+                aliases.add("/")
+            else:
+                aliases.add(rel_path[:-5])
 
     broken_links: list[str] = []
     href_re = re.compile(r'href\s*=\s*"([^"]+)"')
@@ -340,8 +346,7 @@ def validate_generated_links() -> None:
                 continue
 
             path = parsed.path or "/"
-            clean_path = path if not path.endswith(".html") else path[:-5]
-            if clean_path not in existing_paths and path not in existing_paths:
+            if path not in aliases and path not in existing_paths:
                 broken_links.append(f"{html_file.relative_to(OUTPUT_DIR)} -> {href}")
 
     if broken_links:
@@ -352,14 +357,8 @@ def validate_generated_links() -> None:
 def build_site() -> None:
     posts = load_posts()
     tag_index = build_tag_index(posts)
+    all_tension_tags = get_all_tension_tags()
     clean_output_dir()
-
-    pillar_posts = filter_by_type(posts, "pillar")
-    framework_posts = filter_by_type(posts, "framework")
-    letter_posts = filter_by_type(posts, "letter")
-    blog_posts = filter_by_type(posts, "post")
-
-    latest_posts = blog_posts[:10]
 
     env = Environment(
         autoescape=select_autoescape(enabled_extensions=("html",), default_for_string=True),
@@ -371,7 +370,8 @@ def build_site() -> None:
     # Render individual posts
     for post in posts:
         rendered_content = Markup(markdown_to_html(post.body_markdown))
-        related_posts = get_related_posts(post, posts)
+        related_tensions = get_related_tensions(post.tags)
+        related_articles = get_related_articles(post, posts)
 
         html_text = render_template(
             env,
@@ -383,142 +383,60 @@ def build_site() -> None:
                 "tags": post.tags,
                 "content": rendered_content,
                 "url": post.url,
-                "content_type": post.content_type,
-                "related_posts": related_posts,
+                "related_tensions": related_tensions,
+                "related_articles": related_articles,
             },
         )
         write_output(post.output_filename, html_text)
 
-    # Homepage
+    # Core pages
     write_output(
         "index.html",
         render_template(
             env,
             "index.html",
             {
-                "pillars": pillar_posts,
-                "frameworks": framework_posts,
-                "letters": letter_posts,
-                "latest_posts": latest_posts,
+                "posts": posts,
+                "tensions": get_tensions_preview(),
                 "site_url": SITE_URL,
             },
         ),
     )
 
-    # Archive pages
-    if blog_posts:
-        write_output(
-            "post/index.html",
-            render_template(
-                env,
-                "archive.html",
-                {
-                    "posts": blog_posts,
-                    "content_type": "post",
-                    "type_label": "Bai Phan Tich",
-                    "site_url": SITE_URL,
-                },
-            ),
-        )
-        write_output(
-            "post.html",
-            render_template(env, "redirect.html", {"redirect_url": "/post/"}),
-        )
+    write_output(
+        "phan-tich.html",
+        render_template(env, "articles.html", {"articles": posts, "site_url": SITE_URL}),
+    )
 
-    if pillar_posts:
-        write_output(
-            "pillar/index.html",
-            render_template(
-                env,
-                "archive.html",
-                {
-                    "posts": pillar_posts,
-                    "content_type": "pillar",
-                    "type_label": "Tru Cot",
-                    "site_url": SITE_URL,
-                },
-            ),
-        )
-        write_output(
-            "pillar.html",
-            render_template(env, "redirect.html", {"redirect_url": "/pillar/"}),
-        )
+    write_output(
+        "ten-xo.html",
+        render_template(env, "tensions.html", {"tensions_list": TENSIONS, "site_url": SITE_URL}),
+    )
 
-    if framework_posts:
-        write_output(
-            "framework/index.html",
-            render_template(
-                env,
-                "archive.html",
-                {
-                    "posts": framework_posts,
-                    "content_type": "framework",
-                    "type_label": "Khung",
-                    "site_url": SITE_URL,
-                },
-            ),
-        )
-        write_output(
-            "framework.html",
-            render_template(env, "redirect.html", {"redirect_url": "/framework/"}),
-        )
-
-    if letter_posts:
-        write_output(
-            "letter/index.html",
-            render_template(
-                env,
-                "archive.html",
-                {
-                    "posts": letter_posts,
-                    "content_type": "letter",
-                    "type_label": "Thu",
-                    "site_url": SITE_URL,
-                },
-            ),
-        )
-        write_output(
-            "letter.html",
-            render_template(env, "redirect.html", {"redirect_url": "/letter/"}),
-        )
+    write_output("ve-he-thong.html", render_template(env, "about.html", {"site_url": SITE_URL}))
 
     # Tag pages
-    all_tags = sorted(set(tag_index.keys()))
+    all_tags = sorted(set(tag_index.keys()).union(all_tension_tags))
     for tag in all_tags:
         tag_posts = tag_index.get(tag, [])
         write_output(
-            f"tag/{tag}/index.html",
+            f"tags/{tag}.html",
             render_template(
                 env,
-                "archive.html",
+                "articles.html",
                 {
-                    "posts": tag_posts,
-                    "content_type": "post",
-                    "page_title": f"Tag: {tag}",
-                    "type_label": "Bai viet",
+                    "articles": tag_posts,
                     "site_url": SITE_URL,
+                    "page_title": f"Tag: {tag}",
+                    "page_subtitle": f"Bai phan tich co tag '{tag}'",
                 },
             ),
         )
 
     copy_static_assets()
-
-    # Legacy redirects
-    legacy_redirects = [
-        ("ten-xo.html", "/post"),
-        ("phan-tich.html", "/post"),
-        ("ve-he-thong.html", "/post"),
-    ]
-    for old_file, new_url in legacy_redirects:
-        write_output(old_file, render_template(env, "redirect.html", {"redirect_url": new_url}))
-
-    # validate_generated_links()
+    validate_generated_links()
 
     print(f"Built {len(posts)} posts to {OUTPUT_DIR}")
-    print(f"  - {len(pillar_posts)} pillars")
-    print(f"  - {len(framework_posts)} frameworks")
-    print(f"  - {len(letter_posts)} letters")
-    print(f"  - {len(blog_posts)} posts")
 
 
 if __name__ == "__main__":

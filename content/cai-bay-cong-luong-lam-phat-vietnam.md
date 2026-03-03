@@ -1,8 +1,6 @@
 ---
 title: "Cái Bẫy Công Lương và Lạm Phát Thực Tế Tại Việt Nam"
 slug: "cai-bay-cong-luong-lam-phat-vietnam"
-type: "post"
-status: "publish"
 excerpt: "Bạn kiếm 30 triệu/tháng. Bạn vẫn không mua được nhà. Đây là lý do toán học không bao giờ nghiêng về bạn."
 tags: ["thu-nhap", "lam-phat", "viec-lam", "tai-san"]
 date: "2026-03-02"

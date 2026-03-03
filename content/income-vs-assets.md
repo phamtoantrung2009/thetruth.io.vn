@@ -1,8 +1,6 @@
 ---
 title: "Income vs Asset Ownership: The Illusion of the Vietnamese Middle Class"
 slug: "income-vs-assets-vietnam"
-type: "post"
-status: "publish"
 excerpt: "You make 30 million VND/month. You still can't own a home. Here's why the math was never designed for you."
 tags: ["income", "assets", "housing", "vietnam-economy", "middle-class"]
 date: "2026-03-01"

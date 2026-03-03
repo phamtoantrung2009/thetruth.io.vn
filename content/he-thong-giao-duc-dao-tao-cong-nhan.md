@@ -1,8 +1,6 @@
 ---
 title: "Hệ Thống Giáo Dục Đang Đào Tạo Công Nhân, Không Phải Chủ Nhân"
 slug: "he-thong-giao-duc-dao-tao-cong-nhan"
-type: "post"
-status: "publish"
 excerpt: "Bạn tốt nghiệp đại học với 3 năm kinh nghiệm thực tập. Bạn vẫn phải đi xin việc như thể chưa từng học. Đây là lý do."
 tags: ["giao-duc", "viec-lam", "dao-tao", "tri-thuc"]
 date: "2026-03-02"
