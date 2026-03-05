@@ -2,9 +2,9 @@ name = "thetruth-io-vn"
 pages_build_output_dir = "_site"
 
 [[d1_databases]]
-binding = "SUBSCRIBERS_DB"
+binding = "DB"
 database_name = "thetruth-subscribers"
-database_id = "your-database-id-here"
+database_id = "575326b2-7326-46ef-9827-0622a61bfb46"
 
 [[kv_namespaces]]
 binding = "SUBSCRIBERS_KV"
