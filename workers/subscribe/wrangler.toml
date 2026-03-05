@@ -1,5 +1,11 @@
-name = "thetruth-io-vn"
-pages_build_output_dir = "_site"
+name = "thetruth-subscribe"
+main = "index.js"
+
+compatibility_date = "2024-01-01"
+
+routes = [
+  { pattern = "thetruth.io.vn/api/subscribe/*", zone_name = "thetruth.io.vn" }
+]
 
 [[d1_databases]]
 binding = "DB"
@@ -12,7 +18,3 @@ id = "c7d23f66c10544878327f072448d2adf"
 
 [vars]
 SITE_URL = "https://thetruth.io.vn"
-
-# Uncomment and set these in Cloudflare Dashboard or wrangler secrets
-# RESEND_API_KEY = "re_123456789"
-# OWNER_EMAIL = "you@example.com"

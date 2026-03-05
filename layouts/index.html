@@ -314,7 +314,7 @@
             btn.disabled = true;
             btn.textContent = 'Dang gui...';
             
-            fetch('/subscribe', {
+            fetch('/api/subscribe', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email: email })
