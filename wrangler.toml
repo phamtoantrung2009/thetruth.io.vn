@@ -1,2 +1,18 @@
 name = "thetruth-io-vn"
 pages_build_output_dir = "_site"
+
+[[d1_databases]]
+binding = "SUBSCRIBERS_DB"
+database_name = "thetruth-subscribers"
+database_id = "your-database-id-here"
+
+[[kv_namespaces]]
+binding = "SUBSCRIBERS_KV"
+id = "your-kv-namespace-id-here"
+
+[vars]
+SITE_URL = "https://thetruth.io.vn"
+
+# Uncomment and set these in Cloudflare Dashboard or wrangler secrets
+# RESEND_API_KEY = "re_123456789"
+# OWNER_EMAIL = "you@example.com"

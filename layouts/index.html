@@ -8,7 +8,10 @@
     <meta property="og:title" content="THE TRUTH — Sự Thật Về Thực Tại Việt Nam">
     <meta property="og:description" content="Sự thật về thực tại của tầng lớp trung lưu Việt Nam.">
     <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="THE TRUTH — Sự Thật Về Thực Tại Việt Nam">
     <link rel="canonical" href="https://thetruth.io.vn">
+    <link rel="alternate" type="application/rss+xml" title="THE TRUTH" href="/rss.xml">
     <style>
         :root {
             --bg: #0d0d0d;
@@ -21,6 +24,10 @@
             --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; }
+        a:focus, button:focus, input:focus { outline: 2px solid var(--accent); outline-offset: 2px; }
+        .skip-link { position: absolute; top: -40px; left: 0; background: var(--accent); color: #fff; padding: 8px 16px; z-index: 100; }
+        .skip-link:focus { top: 0; }
+        .visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
         body {
             background: var(--bg);
             color: var(--text);
@@ -213,6 +220,7 @@
     </style>
 </head>
 <body>
+    <a href="#main-content" class="skip-link">Skip to content</a>
     <header>
         <a href="/" class="logo">THE TRUTH<span>.</span></a>
         <nav>
@@ -226,15 +234,28 @@
         <h1>Sự thật về thực tại của tầng lớp trung lưu Việt Nam.</h1>
         <p>Chúng tôi giải mã các lực hệ thống — thu nhập vs tài sản, làm việc vs vốn, ổn định vs Thoát. Không động viên. Để làm rõ.</p>
     </section>
+
+    <!-- Search -->
+    <section class="search-section" style="margin: 2rem 0;">
+        <form id="search-form">
+            <input type="search" id="search-input" placeholder="Tìm bài phân tích..." aria-label="Tìm kiếm" style="width:100%;background:var(--bg);border:1px solid var(--border);color:var(--text);padding:0.75rem 1rem;border-radius:4px;font-size:0.95rem;">
+        </form>
+        <div id="search-results" style="margin-top:1rem;"></div>
+    </section>
+
+    <main id="main-content">
     <!-- Email Capture -->
-    <section class="email-capture">
+    <section class="email-capture" id="subscribe">
         <h3>Nhận phân tích hàng tuần</h3>
         <p>Không động viên. Không hype. Chỉ có sự thật.</p>
-        <form class="email-form" onsubmit="event.preventDefault(); alert('Sắp ra mắt');">
-            <input type="email" placeholder="email@cuaban.com" required>
+        <form class="email-form" id="email-form">
+            <label for="email-input" class="visually-hidden">Email của bạn</label>
+            <input type="email" id="email-input" placeholder="email@cuaban.com" required>
             <button type="submit">Đăng ký</button>
         </form>
+        <p id="subscribe-message" style="display:none; margin-top:1rem; font-size:0.9rem;"></p>
     </section>
+    </main>
 
     <!-- Tensions Preview -->
     <section>
@@ -279,6 +300,81 @@
     <footer>
         <p>© 2026 THE TRUTH — Giải mã thực tại hệ thống</p>
     </footer>
+
+    <script>
+    // Email subscribe
+    (function() {
+        var form = document.getElementById('email-form');
+        var msg = document.getElementById('subscribe-message');
+        
+        form.addEventListener('submit', function(e){
+            e.preventDefault();
+            var email = document.getElementById('email-input').value;
+            var btn = form.querySelector('button');
+            btn.disabled = true;
+            btn.textContent = 'Dang gui...';
+            
+            fetch('/subscribe', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: email })
+            }).then(function(res){return res.json();}).then(function(data){
+                msg.textContent = data.message || (data.success ? 'Dang ky thanh cong!' : 'Loi: ' + data.message);
+                msg.style.display = 'block';
+                msg.style.color = data.success ? '#4ade80' : '#f87171';
+                if (data.success) form.reset();
+            }).catch(function(err){
+                msg.textContent = 'Loi ket noi. Thu lai sau.';
+                msg.style.display = 'block';
+                msg.style.color = '#f87171';
+            });
+            btn.disabled = false;
+            btn.textContent = 'Dang ky';
+        });
+    })();
+
+    // Search with debounce
+    (function() {
+        var input = document.getElementById('search-input');
+        var results = document.getElementById('search-results');
+        var index = null;
+        var debounceTimer = null;
+
+        function search(q) {
+            if (!index) {
+                fetch('/search.json').then(function(r){return r.json();}).then(function(x){
+                    index = x.posts;
+                    performSearch(q);
+                });
+                return;
+            }
+            performSearch(q);
+        }
+        
+        function performSearch(q) {
+            var matches = index.filter(function(p){ 
+                return p.t.toLowerCase().indexOf(q) !== -1 || 
+                       p.e.toLowerCase().indexOf(q) !== -1 ||
+                       p.g.some(function(tag){ return tag.indexOf(q) !== -1; });
+            }).slice(0, 10);
+            
+            if (matches.length === 0) {
+                results.innerHTML = '<p style="color:var(--text-muted);">Khong tim thay.</p>';
+                return;
+            }
+            results.innerHTML = matches.map(function(p){ 
+                return '<article style="margin-bottom:1rem;"><a href="/' + p.s + '.html" style="color:var(--text);"><h3 style="font-size:1rem;font-weight:600;">' + p.t + '</h3></a></article>';
+            }).join('');
+        }
+
+        input.addEventListener('input', function(){
+            clearTimeout(debounceTimer);
+            var q = input.value.trim();
+            if (q.length < 2) { results.innerHTML = ''; return; }
+            debounceTimer = setTimeout(function(){ search(q); }, 150);
+        });
+    })();
+    </script>
 </body>
 </html>
 

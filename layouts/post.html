@@ -8,8 +8,11 @@
     <meta property="og:title" content="{{title}}">
     <meta property="og:description" content="{{excerpt}}">
     <meta property="og:type" content="article">
+    <meta property="og:image" content="https://thetruth.io.vn/og/{{slug}}.png">
     <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{title}}">
     <link rel="canonical" href="{{url}}">
+    <link rel="alternate" type="application/rss+xml" title="THE TRUTH" href="/rss.xml">
     <style>
         :root {
             --bg: #0d0d0d;
@@ -22,6 +25,7 @@
             --font-mono: "SF Mono", Monaco, monospace;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; }
+        a:focus, button:focus, input:focus { outline: 2px solid var(--accent); outline-offset: 2px; }
         body {
             background: var(--bg);
             color: var(--text);
@@ -217,6 +221,7 @@
             <h1>{{title}}</h1>
             <div class="meta">
                 <time>{{date}}</time>
+                <span>{{reading_time}} min read</span>
                 <div class="tags">{% for tag in tags %}<span class="tag">{{ tag }}</span>{% endfor %}</div>
             </div>
             

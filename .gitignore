@@ -1,0 +1,28 @@
+# Generated output
+_site/
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+
+# Node
+node_modules/
+
+# Cloudflare
+.wrangler/
+
+# OS
+.DS_Store
+*.log
+
+# Environment
+.env
+.env.*
+
+# IDE
+.idea/
+.vscode/

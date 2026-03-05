@@ -338,6 +338,9 @@ def validate_generated_links() -> None:
 
     for html_file in html_files:
         text = html_file.read_text(encoding="utf-8")
+        # Remove script tag contents to avoid false positives from JS
+        text = re.sub(r'<script[^>]*>.*?</script>', '', text, flags=re.DOTALL)
+        
         for href in href_re.findall(text):
             parsed = urlsplit(href)
             if parsed.scheme or parsed.netloc:
@@ -352,6 +355,179 @@ def validate_generated_links() -> None:
     if broken_links:
         details = "\n".join(sorted(set(broken_links)))
         raise BuildError(f"Broken internal links detected:\n{details}")
+
+
+def calculate_reading_time(markdown_text: str) -> int:
+    """Calculate reading time in minutes (approx 200 words/min)."""
+    word_count = len(markdown_text.split())
+    return max(1, round(word_count / 200))
+
+
+def generate_sitemap(posts: list[Post]) -> str:
+    """Generate sitemap.xml with lastmod dates."""
+    urls = []
+    for p in posts:
+        urls.append(f"""<url>
+    <loc>{p.url}</loc>
+    <lastmod>{p.published_on.isoformat()}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+</url>""")
+    return f"""<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+{chr(10).join(urls)}
+</urlset>"""
+
+
+def generate_robots_txt() -> str:
+    """Generate robots.txt."""
+    return f"""User-agent: *
+Allow: /
+Sitemap: {SITE_URL}/sitemap.xml
+"""
+
+
+def generate_posts_json(posts: list[Post]) -> str:
+    """Generate posts.json for AI pipeline."""
+    import json
+    from datetime import datetime
+    return json.dumps({
+        "posts": [
+            {
+                "title": p.title,
+                "slug": p.slug,
+                "excerpt": p.excerpt,
+                "date": p.published_on.isoformat(),
+                "url": p.url,
+                "tags": list(p.tags),
+                "reading_time": calculate_reading_time(p.body_markdown),
+            }
+            for p in posts
+        ],
+        "generated_at": datetime.now().isoformat()
+    }, indent=2, ensure_ascii=False)
+
+
+def generate_site_manifest(posts: list[Post]) -> str:
+    """Generate site-manifest.json."""
+    import json
+    from datetime import datetime
+    all_tags = sorted(set(tag for p in posts for tag in p.tags))
+    return json.dumps({
+        "site": SITE_URL.replace("https://", ""),
+        "generated_at": datetime.now().isoformat(),
+        "posts_count": len(posts),
+        "tags": list(all_tags),
+        "latest_posts": [
+            {"slug": p.slug, "date": p.published_on.isoformat(), "title": p.title}
+            for p in sorted(posts, key=lambda x: x.published_on, reverse=True)[:5]
+        ],
+        "tensions": [{"id": t["id"], "name": t["name"]} for t in TENSIONS]
+    }, indent=2, ensure_ascii=False)
+
+
+def generate_search_index(posts: list[Post]) -> str:
+    """Generate search.json with lowercase tags."""
+    import json
+    return json.dumps({
+        "posts": [
+            {"t": p.title, "s": p.slug, "e": p.excerpt, "g": [t.lower() for t in p.tags]}
+            for p in posts
+        ]
+    }, ensure_ascii=False)
+
+
+def generate_rss_feed(posts: list[Post]) -> str:
+    """Generate RSS 2.0 feed."""
+    from datetime import datetime
+    items = []
+    for p in posts[:20]:  # Latest 20 posts
+        items.append(f"""<item>
+    <title><![CDATA[{p.title}]]></title>
+    <link>{p.url}</link>
+    <description><![CDATA[{p.excerpt}]]></description>
+    <pubDate>{p.published_on.isoformat()}</pubDate>
+    <guid>{p.url}</guid>
+</item>""")
+    return f"""<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<channel>
+    <title>THE TRUTH</title>
+    <link>{SITE_URL}</link>
+    <description>Sự thật về thực tại Việt Nam</description>
+    <language>vi</language>
+    <atom:link href="{SITE_URL}/rss.xml" rel="self" type="application/rss+xml"/>
+    <lastBuildDate>{datetime.now().strftime('%a, %d %b %Y %H:%M:%S GMT')}</lastBuildDate>
+{chr(10).join(items)}
+</channel>
+</rss>"""
+
+
+OG_TEMPLATE = """<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    body {{
+      background: #0d0d0d;
+      color: #e5e5e5;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 80px;
+      width: 1200px;
+      height: 630px;
+      margin: 0;
+      box-sizing: border-box;
+    }}
+    h1 {{
+      font-size: 52px;
+      line-height: 1.2;
+      margin: 0;
+      max-width: 1000px;
+    }}
+    .brand {{
+      color: #e63946;
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+    }}
+  </style>
+</head>
+<body>
+  <h1>{title}</h1>
+  <div class="brand">THE TRUTH</div>
+</body>
+</html>"""
+
+
+async def generate_og_images(posts: list[Post]) -> None:
+    """Generate OG images using Playwright (single browser session)."""
+    try:
+        from playwright.async_api import async_playwright
+    except ImportError:
+        print("Playwright not installed. Skipping OG image generation.")
+        print("Install with: pip install playwright && playwright install chromium")
+        return
+
+    og_dir = OUTPUT_DIR / "og"
+    og_dir.mkdir(parents=True, exist_ok=True)
+
+    async with async_playwright() as p:
+        browser = await p.chromium.launch()
+        
+        for post in posts:
+            html = OG_TEMPLATE.format(title=post.title[:80])  # Truncate for safety
+            
+            page = await browser.new_page(viewport={"width": 1200, "height": 630})
+            await page.set_content(html)
+            await page.wait_for_timeout(50)  # Wait for render
+            await page.screenshot(path=str(og_dir / f"{post.slug}.png"), type="png")
+            await page.close()
+        
+        await browser.close()
+        print(f"Generated {len(posts)} OG images")
 
 
 def build_site() -> None:
@@ -372,12 +548,14 @@ def build_site() -> None:
         rendered_content = Markup(markdown_to_html(post.body_markdown))
         related_tensions = get_related_tensions(post.tags)
         related_articles = get_related_articles(post, posts)
+        reading_time = calculate_reading_time(post.body_markdown)
 
         html_text = render_template(
             env,
             "post.html",
             {
                 "title": post.title,
+                "slug": post.slug,
                 "excerpt": post.excerpt,
                 "date": post.published_on.isoformat(),
                 "tags": post.tags,
@@ -385,6 +563,7 @@ def build_site() -> None:
                 "url": post.url,
                 "related_tensions": related_tensions,
                 "related_articles": related_articles,
+                "reading_time": reading_time,
             },
         )
         write_output(post.output_filename, html_text)
@@ -432,6 +611,18 @@ def build_site() -> None:
                 },
             ),
         )
+
+    # Generate sitemap, manifest, search index, RSS
+    write_output("sitemap.xml", generate_sitemap(posts))
+    write_output("robots.txt", generate_robots_txt())
+    write_output("posts.json", generate_posts_json(posts))
+    write_output("site-manifest.json", generate_site_manifest(posts))
+    write_output("search.json", generate_search_index(posts))
+    write_output("rss.xml", generate_rss_feed(posts))
+
+    # Generate OG images
+    import asyncio
+    asyncio.run(generate_og_images(posts))
 
     copy_static_assets()
     validate_generated_links()
