@@ -17,7 +17,7 @@ import yaml
 from jinja2 import Environment, StrictUndefined, select_autoescape
 from markupsafe import Markup
 
-BASE_DIR = Path(__file__).parent.resolve()
+BASE_DIR = Path(__file__).parent.parent.resolve()
 CONTENT_DIR = BASE_DIR / "content"
 LAYOUTS_DIR = BASE_DIR / "layouts"
 OUTPUT_DIR = BASE_DIR / "_site"
