@@ -3,10 +3,6 @@
  * Double opt-in flow with secure tokens
  */
 
-const DB = env.SUBSCRIBERS_DB;
-const KV = env.SUBSCRIBERS_KV;
-const RESEND_API_KEY = env.RESEND_API_KEY;
-const OWNER_EMAIL = env.OWNER_EMAIL;
 const SITE_URL = "https://thetruth.io.vn";
 
 // CORS headers
@@ -31,7 +27,7 @@ function isValidEmail(email) {
 }
 
 // Rate limiting check
-async function checkRateLimit(ip) {
+async function checkRateLimit(KV, ip) {
   const key = `ratelimit:${ip}`;
   const lastSubmit = await KV.get(key);
   if (lastSubmit && Date.now() - parseInt(lastSubmit) < 60000) {
@@ -42,7 +38,7 @@ async function checkRateLimit(ip) {
 }
 
 // Send email via Resend
-async function sendEmail(to, subject, html) {
+async function sendEmail(RESEND_API_KEY, OWNER_EMAIL, to, subject, html) {
   const response = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: {
@@ -59,10 +55,15 @@ async function sendEmail(to, subject, html) {
   return response.ok;
 }
 
-async function handleSubscribe(request) {
+async function handleSubscribe(request, env) {
+  const DB = env.DB;
+  const KV = env.SUBSCRIBERS_KV;
+  const RESEND_API_KEY = env.RESEND_API_KEY;
+  const OWNER_EMAIL = env.OWNER_EMAIL;
+
   // Rate limit
   const ip = request.headers.get('CF-Connecting-IP') || 'unknown';
-  if (!(await checkRateLimit(ip))) {
+  if (!(await checkRateLimit(KV, ip))) {
     return new Response(JSON.stringify({ success: false, message: "Thử lại sau 1 phút." }), {
       status: 429,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -122,9 +123,7 @@ async function handleSubscribe(request) {
     ).bind(email, token, ip).run();
 
     // Send confirmation email
-    await sendEmail(
-      email,
-      "Xác nhận đăng ký - THE TRUTH",
+    await sendEmail(RESEND_API_KEY, OWNER_EMAIL, email, "Xác nhận đăng ký - THE TRUTH",
       `<h2>Xác nhận đăng ký</h2>
        <p>Nhấp vào link bên dưới để xác nhận:</p>
        <p><a href="${confirmUrl}" style="background:#e63946;color:#fff;padding:12px 24px;text-decoration:none;border-radius:4px;display:inline-block;">Xác nhận</a></p>
@@ -133,9 +132,7 @@ async function handleSubscribe(request) {
     );
 
     // Notify owner
-    await sendEmail(
-      OWNER_EMAIL,
-      "🔔 New subscriber",
+    await sendEmail(RESEND_API_KEY, OWNER_EMAIL, OWNER_EMAIL, "🔔 New subscriber",
       `<p>New pending subscriber: ${email}</p>`
     );
 
@@ -151,7 +148,8 @@ async function handleSubscribe(request) {
   }
 }
 
-async function handleConfirm(request) {
+async function handleConfirm(request, env) {
+  const DB = env.DB;
   const url = new URL(request.url);
   const token = url.searchParams.get('token');
 
@@ -182,7 +180,8 @@ async function handleConfirm(request) {
   return new Response.redirect(SITE_URL + "?subscribed=true", 302);
 }
 
-async function handleUnsubscribe(request) {
+async function handleUnsubscribe(request, env) {
+  const DB = env.DB;
   const url = new URL(request.url);
   const token = url.searchParams.get('token');
 
@@ -215,7 +214,7 @@ async function handleUnsubscribe(request) {
 }
 
 export default {
-  async fetch(request) {
+  async fetch(request, env) {
     const url = new URL(request.url);
     const path = url.pathname;
 
@@ -227,15 +226,15 @@ export default {
     try {
       // Routes
       if (path === '/subscribe' && request.method === 'POST') {
-        return handleSubscribe(request);
+        return handleSubscribe(request, env);
       }
 
       if (path === '/subscribe/confirm' && request.method === 'GET') {
-        return handleConfirm(request);
+        return handleConfirm(request, env);
       }
 
       if (path === '/subscribe/unsubscribe' && request.method === 'GET') {
-        return handleUnsubscribe(request);
+        return handleUnsubscribe(request, env);
       }
 
       return new Response("Not found", { status: 404 });
