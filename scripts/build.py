@@ -508,26 +508,29 @@ async def generate_og_images(posts: list[Post]) -> None:
         from playwright.async_api import async_playwright
     except ImportError:
         print("Playwright not installed. Skipping OG image generation.")
-        print("Install with: pip install playwright && playwright install chromium")
         return
 
     og_dir = OUTPUT_DIR / "og"
     og_dir.mkdir(parents=True, exist_ok=True)
 
-    async with async_playwright() as p:
-        browser = await p.chromium.launch()
-        
-        for post in posts:
-            html = OG_TEMPLATE.format(title=post.title[:80])  # Truncate for safety
+    try:
+        async with async_playwright() as p:
+            browser = await p.chromium.launch()
             
-            page = await browser.new_page(viewport={"width": 1200, "height": 630})
-            await page.set_content(html)
-            await page.wait_for_timeout(50)  # Wait for render
-            await page.screenshot(path=str(og_dir / f"{post.slug}.png"), type="png")
-            await page.close()
-        
-        await browser.close()
-        print(f"Generated {len(posts)} OG images")
+            for post in posts:
+                html = OG_TEMPLATE.format(title=post.title[:80])  # Truncate for safety
+                
+                page = await browser.new_page(viewport={"width": 1200, "height": 630})
+                await page.set_content(html)
+                await page.wait_for_timeout(50)  # Wait for render
+                await page.screenshot(path=str(og_dir / f"{post.slug}.png"), type="png")
+                await page.close()
+            
+            await browser.close()
+            print(f"Generated {len(posts)} OG images")
+    except Exception as e:
+        print(f"OG image generation skipped: {e}")
+        print("To enable OG images, run: playwright install chromium")
 
 
 def build_site() -> None:
