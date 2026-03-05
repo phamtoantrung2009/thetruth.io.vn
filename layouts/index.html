@@ -314,7 +314,7 @@
             btn.disabled = true;
             btn.textContent = 'Dang gui...';
             
-            fetch('/api/subscribe', {
+            fetch('https://thetruth-subscribe.phamtoantrung2009.workers.dev/subscribe', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email: email })

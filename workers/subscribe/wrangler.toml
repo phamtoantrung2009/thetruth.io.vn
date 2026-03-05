@@ -2,6 +2,7 @@ name = "thetruth-subscribe"
 main = "index.js"
 
 compatibility_date = "2024-01-01"
+workers_dev = true
 
 routes = [
   { pattern = "thetruth.io.vn/api/subscribe/*", zone_name = "thetruth.io.vn" }
