@@ -39,20 +39,34 @@ async function checkRateLimit(KV, ip) {
 
 // Send email via Resend
 async function sendEmail(RESEND_API_KEY, OWNER_EMAIL, to, subject, html) {
-  const response = await fetch('https://api.resend.com/emails', {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${RESEND_API_KEY}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      from: 'THE TRUTH <noreply@thetruth.io.vn>',
-      to: to,
-      subject: subject,
-      html: html,
-    }),
-  });
-  return response.ok;
+  if (!RESEND_API_KEY) {
+    console.error("RESEND_API_KEY not configured");
+    return false;
+  }
+  
+  try {
+    const response = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${RESEND_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        from: 'THE TRUTH <noreply@thetruth.io.vn>',
+        to: to,
+        subject: subject,
+        html: html,
+      }),
+    });
+    
+    const result = await response.json();
+    console.log("Resend response:", result);
+    
+    return response.ok;
+  } catch (e) {
+    console.error("Resend error:", e);
+    return false;
+  }
 }
 
 async function handleSubscribe(request, env) {
@@ -113,14 +127,17 @@ async function handleSubscribe(request, env) {
   const token = generateToken();
   const confirmUrl = `${SITE_URL}/subscribe/confirm?token=${token}`;
 
-  try {
-    // Insert pending subscriber
-    await DB.prepare(
-      "INSERT INTO subscribers (email, confirm_token, created_ip) VALUES (?, ?, ?)"
-    ).bind(email, token, ip).run();
+  // Insert pending subscriber FIRST (before sending email)
+  await DB.prepare(
+    "INSERT INTO subscribers (email, confirm_token, created_ip) VALUES (?, ?, ?)"
+  ).bind(email, token, ip).run();
 
-    // Send confirmation email
-    await sendEmail(RESEND_API_KEY, OWNER_EMAIL,
+  // Send confirmation email
+  let emailSent = false;
+  let emailError = "";
+  
+  try {
+    emailSent = await sendEmail(RESEND_API_KEY, OWNER_EMAIL,
       email,
       "Xác nhận đăng ký - THE TRUTH",
       `<h2>Xác nhận đăng ký</h2>
@@ -129,26 +146,27 @@ async function handleSubscribe(request, env) {
        <p>Link hết hạn sau 24 giờ.</p>
        <p><small>Nếu bạn không đăng ký, bỏ qua email này.</small></p>`
     );
-
-    // Notify owner
-    if (OWNER_EMAIL) {
-      await sendEmail(RESEND_API_KEY, OWNER_EMAIL,
-        OWNER_EMAIL,
-        "🔔 New subscriber",
-        `<p>New pending subscriber: ${email}</p>`
-      );
-    }
-
-    return new Response(JSON.stringify({ success: true, message: "Kiểm tra email để xác nhận." }), {
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-    });
-
   } catch (e) {
-    return new Response(JSON.stringify({ success: false, message: "Lỗi server. Thử lại sau." }), {
-      status: 500,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-    });
+    emailError = e.message;
   }
+
+  // Notify owner (non-blocking)
+  if (OWNER_EMAIL && RESEND_API_KEY) {
+    sendEmail(RESEND_API_KEY, OWNER_EMAIL,
+      OWNER_EMAIL,
+      "🔔 New subscriber",
+      `<p>New pending subscriber: ${email}</p>`
+    ).catch(() => {}); // Don't fail if owner notification fails
+  }
+
+  if (!emailSent) {
+    // Email failed - log for debugging
+    console.log("Email send failed. Error:", emailError, "RESEND_KEY exists:", !!RESEND_API_KEY);
+  }
+
+  return new Response(JSON.stringify({ success: true, message: "Kiểm tra email để xác nhận." }), {
+    headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+  });
 }
 
 async function handleConfirm(request, env) {
