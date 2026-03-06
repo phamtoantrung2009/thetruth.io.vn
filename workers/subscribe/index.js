@@ -169,6 +169,49 @@ async function handleSubscribe(request, env) {
   });
 }
 
+// Build welcome email HTML
+function buildWelcomeEmail() {
+  return `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="background:#0d0d0d;color:#e5e5e5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;margin:0;padding:40px 20px;line-height:1.6;">
+  <div style="max-width:520px;margin:0 auto;">
+    <p style="margin-bottom:30px;">Bạn đã đến đây.</p>
+    
+    <p>Đó không phải một quyết định ngẫu nhiên. Bạn không tình cờ nhấn nút đăng ký. Có một lý do bạn muốn hiểu cách thức vận hành của thứ gọi là "hệ thống" — và tại sao nó khiến cuộc sống trở nên khó hiểu đến vậy.</p>
+    
+    <p>THE TRUTH không phải một diễn giả. Chúng tôi không động viên. Chúng tôi không kể bạn nghe những gì bạn muốn nghe.</p>
+    
+    <p>Chúng tôi là một công cụ quan sát. Phân tích cấu trúc. Bằng chứng, không phải cảm xúc.</p>
+    
+    <p>Mỗi tuần, bạn sẽ nhận được những bài viết đi sâu vào các lực định hình cuộc sống tầng lớp trung lưu Việt Nam: thu nhập vs tài sản, làm việc vs vốn, nghĩa vụ gia đình vs tự chủ. Không có câu trả lời dễ dàng. Chỉ có câu hỏi được làm rõ hơn.</p>
+    
+    <p><strong>Đây là điều bạn sẽ nhận được:</strong></p>
+    <ul style="margin:20px 0;">
+      <li>Phân tích về những gì thực sự đang xảy ra với kinh tế, xã hội, và cấu trúc quyền lực ở Việt Nam.</li>
+      <li>Những góc nhìn mà truyền thông chính thức không đề cập.</li>
+      <li>Không hype. Không motivational quotes. Chỉ sự thật lạnh lùng.</li>
+    </ul>
+    
+    <p style="margin-top:30px;">Nếu bạn muốn bắt đầu ngay hôm nay:</p>
+    
+    <p><a href="https://thetruth.io.vn/cai-bay-cong-luong-lam-phat-vietnam" style="color:#e63946;text-decoration:underline;">Cai Bay Công Lương, Lạm Phát Vietnam →</a></p>
+    <p><a href="https://thetruth.io.vn/khung-hoang-nam-tinh-ap-luc-tru-cot" style="color:#e63946;text-decoration:underline;">Khung Hoảng Năm Tính, Áp Lực Trụ Cột →</a></p>
+    <p><a href="https://thetruth.io.vn/tiet-kiem-khong-mua-duoc-nha-pho" style="color:#e63946;text-decoration:underline;">Tiết Kiệm Không Mua Được Nhà Phố →</a></p>
+    
+    <p style="margin-top:40px;color:#666;">Hoặc không. Đọc khi nào bạn sẵn sàng.</p>
+    
+    <p style="color:#666;">Thực tại không chờ ai.</p>
+    
+    <p style="margin-top:40px;">— THE TRUTH</p>
+  </div>
+</body>
+</html>`;
+}
+
 async function handleConfirm(request, env) {
   const { DB } = env;
   const url = new URL(request.url);
@@ -196,6 +239,16 @@ async function handleConfirm(request, env) {
   await DB.prepare(
     "UPDATE subscribers SET status = 'active', confirmed_at = datetime('now') WHERE confirm_token = ?"
   ).bind(token).run();
+
+  // Send welcome email (non-blocking)
+  const { RESEND_API_KEY, OWNER_EMAIL } = env;
+  if (RESEND_API_KEY) {
+    sendEmail(RESEND_API_KEY, OWNER_EMAIL,
+      subscriber.email,
+      "Chào mừng. Đây là thực tại.",
+      buildWelcomeEmail()
+    ).catch(() => {}); // Don't fail redirect if email fails
+  }
 
   // Redirect to home with success
   return new Response.redirect(SITE_URL + "?subscribed=true", 302);
