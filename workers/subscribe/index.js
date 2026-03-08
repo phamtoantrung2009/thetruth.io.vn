@@ -43,7 +43,7 @@ async function sendEmail(RESEND_API_KEY, OWNER_EMAIL, to, subject, html) {
     console.error("RESEND_API_KEY not configured");
     return false;
   }
-  
+
   try {
     const response = await fetch('https://api.resend.com/emails', {
       method: 'POST',
@@ -58,10 +58,10 @@ async function sendEmail(RESEND_API_KEY, OWNER_EMAIL, to, subject, html) {
         html: html,
       }),
     });
-    
+
     const result = await response.json();
     console.log("Resend response:", result);
-    
+
     return response.ok;
   } catch (e) {
     console.error("Resend error:", e);
@@ -71,7 +71,7 @@ async function sendEmail(RESEND_API_KEY, OWNER_EMAIL, to, subject, html) {
 
 async function handleSubscribe(request, env) {
   const { DB, SUBSCRIBERS_KV, RESEND_API_KEY, OWNER_EMAIL } = env;
-  
+
   // Rate limit
   const ip = request.headers.get('CF-Connecting-IP') || 'unknown';
   if (!(await checkRateLimit(SUBSCRIBERS_KV, ip))) {
@@ -135,7 +135,7 @@ async function handleSubscribe(request, env) {
   // Send confirmation email
   let emailSent = false;
   let emailError = "";
-  
+
   try {
     emailSent = await sendEmail(RESEND_API_KEY, OWNER_EMAIL,
       email,
@@ -156,7 +156,7 @@ async function handleSubscribe(request, env) {
       OWNER_EMAIL,
       "🔔 New subscriber",
       `<p>New pending subscriber: ${email}</p>`
-    ).catch(() => {}); // Don't fail if owner notification fails
+    ).catch(() => { }); // Don't fail if owner notification fails
   }
 
   if (!emailSent) {
@@ -247,11 +247,11 @@ async function handleConfirm(request, env) {
       subscriber.email,
       "Chào mừng. Đây là thực tại.",
       buildWelcomeEmail()
-    ).catch(() => {}); // Don't fail redirect if email fails
+    ).catch(() => { }); // Don't fail redirect if email fails
   }
 
   // Redirect to home with success
-  return new Response.redirect(SITE_URL + "?subscribed=true", 302);
+  return Response.redirect(SITE_URL + "?subscribed=true", 302);
 }
 
 async function handleUnsubscribe(request, env) {
@@ -299,15 +299,15 @@ export default {
 
     try {
       // Routes
-      if (path === '/subscribe' && request.method === 'POST') {
+      if (path === '/api/subscribe' && request.method === 'POST') {
         return handleSubscribe(request, env);
       }
 
-      if (path === '/subscribe/confirm' && request.method === 'GET') {
+      if (path === '/api/subscribe/confirm' && request.method === 'GET') {
         return handleConfirm(request, env);
       }
 
-      if (path === '/subscribe/unsubscribe' && request.method === 'GET') {
+      if (path === '/api/subscribe/unsubscribe' && request.method === 'GET') {
         return handleUnsubscribe(request, env);
       }
 
