@@ -164,9 +164,16 @@ async function handleSubscribe(request, env) {
     });
   }
 
-  // Send welcome email (blocking for debug)
-  const emailOk = await sendEmail(RESEND_API_KEY, OWNER_EMAIL, email, "Chào mừng bạn đến với THE TRUTH", buildWelcomeEmail());
-  console.log("Welcome email result:", emailOk);
+  // Send welcome email (non-blocking)
+  sendEmail(
+    RESEND_API_KEY,
+    OWNER_EMAIL,
+    email,
+    "Chào mừng bạn đến với THE TRUTH",
+    buildWelcomeEmail()
+  ).then(ok => {
+    if (!ok) console.log("Welcome email send failed for:", email);
+  }).catch(() => { });
 
   // Notify owner (non-blocking)
   if (OWNER_EMAIL && RESEND_API_KEY) {
