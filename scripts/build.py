@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import math
 import os
 import re
 import shutil
@@ -28,6 +29,7 @@ REQUIRED_FIELDS = ("title", "slug", "excerpt", "date")
 SLUG_PATTERN = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 FRONTMATTER_RE = re.compile(r"\A---\s*\n(.*?)\n---\s*\n?(.*)\Z", re.DOTALL)
 UNRESOLVED_TEMPLATE_TOKEN_RE = re.compile(r"\{\{\s*[^{}]+\s*\}\}")
+POSTS_PER_PAGE = 12
 
 # Tension data (Vietnamese)
 TENSIONS = [
@@ -238,6 +240,13 @@ def get_all_tension_tags() -> set[str]:
 def get_tensions_preview() -> list[dict[str, Any]]:
     return TENSIONS[:6]
 
+
+def paginate_posts(posts: list[Post], per_page: int = POSTS_PER_PAGE):
+    """Yield (page_number, page_posts, total_pages) tuples (1-indexed)."""
+    total_pages = max(1, math.ceil(len(posts) / per_page))
+    for page_num in range(1, total_pages + 1):
+        start = (page_num - 1) * per_page
+        yield page_num, posts[start:start + per_page], total_pages
 
 def get_related_tensions(tags: tuple[str, ...]) -> list[dict[str, str]]:
     if not tags:
@@ -578,17 +587,34 @@ def build_site() -> None:
             env,
             "index.html",
             {
-                "posts": posts,
+                "posts": posts[:6],  # Show latest 6 on homepage
                 "tensions": get_tensions_preview(),
                 "site_url": SITE_URL,
             },
         ),
     )
 
-    write_output(
-        "phan-tich.html",
-        render_template(env, "articles.html", {"articles": posts, "site_url": SITE_URL}),
-    )
+    # Paginated articles archive
+    for page_num, page_posts, total_pages in paginate_posts(posts):
+        out_path = "phan-tich.html" if page_num == 1 else f"phan-tich/page/{page_num}.html"
+        canonical = f"{SITE_URL}/phan-tich" if page_num == 1 else f"{SITE_URL}/phan-tich/page/{page_num}"
+        prev_url = None
+        if page_num > 1:
+            prev_url = f"{SITE_URL}/phan-tich" if page_num == 2 else f"{SITE_URL}/phan-tich/page/{page_num - 1}"
+        next_url = f"{SITE_URL}/phan-tich/page/{page_num + 1}" if page_num < total_pages else None
+        write_output(
+            out_path,
+            render_template(env, "articles.html", {
+                "articles": page_posts,
+                "site_url": SITE_URL,
+                "current_page": page_num,
+                "total_pages": total_pages,
+                "base_path": "/phan-tich",
+                "canonical": canonical,
+                "prev_url": prev_url,
+                "next_url": next_url,
+            }),
+        )
 
     write_output(
         "ten-xo.html",

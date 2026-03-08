@@ -13,6 +13,11 @@ id = "c7d23f66c10544878327f072448d2adf"
 [vars]
 SITE_URL = "https://thetruth.io.vn"
 
-# Uncomment and set these in Cloudflare Dashboard or wrangler secrets
-# RESEND_API_KEY = "re_123456789"
-# OWNER_EMAIL = "you@example.com"
+# REQUIRED SECRETS — do NOT put these in [vars] (they'd be visible in plaintext).
+# Set via Wrangler CLI (run once, stored encrypted in Cloudflare):
+#
+#   wrangler secret put RESEND_API_KEY   → paste your re_... key
+#   wrangler secret put OWNER_EMAIL      → e.g. you@thetruth.io.vn
+#
+# Verify secrets are set: wrangler secret list
+# Tail live logs:         wrangler tail --format=pretty

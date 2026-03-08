@@ -1,15 +1,20 @@
 ﻿<!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Phân Tích — THE TRUTH</title>
+    <title>{% if page_title %}{{ page_title }} — THE TRUTH{% else %}Phân Tích — THE TRUTH{% endif %}</title>
     <meta name="description" content="Tất cả bài phân tích hệ thống.">
     <meta property="og:title" content="Phân Tích — THE TRUTH">
     <meta property="og:description" content="Tất cả bài phân tích hệ thống.">
     <meta property="og:type" content="website">
-    <link rel="canonical" href="https://thetruth.io.vn/phan-tich.html">
+    <link rel="canonical" href="{% if canonical %}{{ canonical }}{% else %}{{ site_url }}/phan-tich{% endif %}">
     <link rel="alternate" type="application/rss+xml" title="THE TRUTH" href="/rss.xml">
+    {% if prev_url %}
+    <link rel="prev" href="{{ prev_url }}">{% endif %}
+    {% if next_url %}
+    <link rel="next" href="{{ next_url }}">{% endif %}
     <style>
         :root {
             --bg: #0d0d0d;
@@ -19,7 +24,13 @@
             --border: #262626;
             --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
             background: var(--bg);
             color: var(--text);
@@ -29,67 +40,237 @@
             margin: 0 auto;
             padding: 0 1.5rem 3rem;
         }
-        a { color: var(--text); text-decoration: none; }
-        a:hover { color: var(--accent); }
-        
-        header { 
-            display: flex; 
-            justify-content: space-between; 
+
+        a {
+            color: var(--text);
+            text-decoration: none;
+        }
+
+        a:hover {
+            color: var(--accent);
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
             align-items: center;
             padding: 1.5rem 0;
             border-bottom: 1px solid var(--border);
             margin-bottom: 2.5rem;
         }
-        .logo { font-size: 1.4rem; font-weight: 700; letter-spacing: -0.02em; }
-        .logo span { color: var(--accent); }
-        nav a { 
-            color: var(--text-muted); 
-            margin-left: 1.5rem; 
+
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .logo span {
+            color: var(--accent);
+        }
+
+        nav a {
+            color: var(--text-muted);
+            margin-left: 1.5rem;
             font-size: 0.9rem;
         }
-        nav a:hover { color: var(--text); }
-        
-        h1 { 
-            font-size: 2rem; 
-            font-weight: 700; 
+
+        nav a:hover {
+            color: var(--text);
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 700;
             margin-bottom: 0.5rem;
         }
-        .subtitle { 
-            color: var(--text-muted); 
+
+        .subtitle {
+            color: var(--text-muted);
             margin-bottom: 2.5rem;
         }
-        
-        .articles { list-style: none; }
-        .articles li { margin-bottom: 2rem; }
-        .articles a { display: block; }
-        .articles a:hover h2 { color: var(--accent); }
-        .articles h2 { 
-            font-size: 1.35rem; 
-            font-weight: 600; 
+
+        .articles {
+            list-style: none;
+        }
+
+        .articles li {
+            margin-bottom: 2rem;
+        }
+
+        .articles a {
+            display: block;
+        }
+
+        .articles a:hover h2 {
+            color: var(--accent);
+        }
+
+        .articles h2 {
+            font-size: 1.35rem;
+            font-weight: 600;
             margin-bottom: 0.4rem;
             transition: color 0.2s;
         }
-        .articles .excerpt { color: #999; font-size: 0.95rem; margin-bottom: 0.5rem; }
-        .articles .meta { color: var(--text-muted); font-size: 0.8rem; }
-        .tag { 
-            display: inline-block; 
-            background: var(--border); 
-            padding: 0.15rem 0.5rem; 
-            border-radius: 3px; 
-            font-size: 0.7rem; 
+
+        .articles .excerpt {
+            color: #999;
+            font-size: 0.95rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .articles .meta {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+
+        .tag {
+            display: inline-block;
+            background: var(--border);
+            padding: 0.15rem 0.5rem;
+            border-radius: 3px;
+            font-size: 0.7rem;
             margin-right: 0.4rem;
         }
-        
-        footer { 
-            margin-top: 4rem; 
-            padding-top: 2rem; 
-            border-top: 1px solid var(--border); 
-            color: var(--text-muted); 
-            font-size: 0.8rem; 
+
+        footer {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 0.8rem;
             text-align: center;
+        }
+
+        /* ── Animations ─────────────────────────────────────────── */
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        header {
+            animation: fadeIn .4s ease both;
+        }
+
+        main {
+            animation: fadeUp .5s .08s ease both;
+        }
+
+        /* Stagger article list */
+        .articles li {
+            animation: fadeUp .4s ease both;
+        }
+
+        .articles li:nth-child(1) {
+            animation-delay: .2s;
+        }
+
+        .articles li:nth-child(2) {
+            animation-delay: .27s;
+        }
+
+        .articles li:nth-child(3) {
+            animation-delay: .34s;
+        }
+
+        .articles li:nth-child(n+4) {
+            animation-delay: .4s;
+        }
+
+        /* Hover lift on article links */
+        .articles a {
+            transition: transform .2s ease;
+            display: block;
+            will-change: transform;
+        }
+
+        .articles li:hover>a {
+            transform: translateX(4px);
+        }
+
+        /* Nav underline slide */
+        nav a {
+            position: relative;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -2px;
+            width: 0;
+            height: 1px;
+            background: var(--accent);
+            transition: width .25s ease;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        /* Pagination bar */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .pagination a,
+        .pagination span {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 2.2rem;
+            height: 2.2rem;
+            padding: 0 0.6rem;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: border-color .2s, color .2s;
+        }
+
+        .pagination a:hover {
+            border-color: var(--accent);
+            color: var(--text);
+        }
+
+        .pagination .current {
+            border-color: var(--accent);
+            color: var(--accent);
+            font-weight: 600;
+            cursor: default;
+        }
+
+        .pagination .disabled {
+            opacity: .35;
+            cursor: default;
+            pointer-events: none;
         }
     </style>
 </head>
+
 <body>
     <header>
         <a href="/" class="logo">THE TRUTH<span>.</span></a>
@@ -103,7 +284,7 @@
     <main>
         <h1>{{ page_title | default("Tất Cả Phân Tích") }}</h1>
         <p class="subtitle">{{ page_subtitle | default("Giải mã thực tại hệ thống cho nam giới Việt Nam 30+.") }}</p>
-        
+
         <ul class="articles">
             {% for post in articles %}
             <li>
@@ -120,11 +301,40 @@
             </li>
             {% endfor %}
         </ul>
+
+        {% if total_pages is defined and total_pages > 1 %}
+        <nav class="pagination" aria-label="Phân trang">
+            {% if prev_url %}
+            <a href="{{ prev_url }}" aria-label="Trang trước">← Trước</a>
+            {% else %}
+            <span class="disabled">← Trước</span>
+            {% endif %}
+
+            {% for p in range(1, total_pages + 1) %}
+            {% if p == 1 %}
+            {% set p_url = base_path %}
+            {% else %}
+            {% set p_url = base_path + "/page/" + p|string %}
+            {% endif %}
+            {% if p == current_page %}
+            <span class="current" aria-current="page">{{ p }}</span>
+            {% else %}
+            <a href="{{ p_url }}">{{ p }}</a>
+            {% endif %}
+            {% endfor %}
+
+            {% if next_url %}
+            <a href="{{ next_url }}" aria-label="Trang sau">Sau →</a>
+            {% else %}
+            <span class="disabled">Sau →</span>
+            {% endif %}
+        </nav>
+        {% endif %}
     </main>
 
     <footer>
         <p>© 2026 THE TRUTH — Giải mã thực tại hệ thống</p>
     </footer>
 </body>
-</html>
 
+</html>

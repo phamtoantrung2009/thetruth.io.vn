@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,7 +21,13 @@
             --card-bg: #141414;
             --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
             background: var(--bg);
             color: var(--text);
@@ -30,38 +37,58 @@
             margin: 0 auto;
             padding: 0 1.5rem 3rem;
         }
-        a { color: var(--text); text-decoration: none; }
-        a:hover { color: var(--accent); }
-        
-        header { 
-            display: flex; 
-            justify-content: space-between; 
+
+        a {
+            color: var(--text);
+            text-decoration: none;
+        }
+
+        a:hover {
+            color: var(--accent);
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
             align-items: center;
             padding: 1.5rem 0;
             border-bottom: 1px solid var(--border);
             margin-bottom: 2.5rem;
         }
-        .logo { font-size: 1.4rem; font-weight: 700; letter-spacing: -0.02em; }
-        .logo span { color: var(--accent); }
-        nav a { 
-            color: var(--text-muted); 
-            margin-left: 1.5rem; 
+
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .logo span {
+            color: var(--accent);
+        }
+
+        nav a {
+            color: var(--text-muted);
+            margin-left: 1.5rem;
             font-size: 0.9rem;
         }
-        nav a:hover { color: var(--text); }
-        
-        h1 { 
-            font-size: 2rem; 
-            font-weight: 700; 
+
+        nav a:hover {
+            color: var(--text);
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 700;
             margin-bottom: 1rem;
         }
-        .intro { 
-            color: var(--text-muted); 
-            font-size: 1.05rem; 
+
+        .intro {
+            color: var(--text-muted);
+            font-size: 1.05rem;
             margin-bottom: 2.5rem;
             max-width: 560px;
         }
-        
+
         .tension {
             background: var(--card-bg);
             border: 1px solid var(--border);
@@ -70,40 +97,149 @@
             margin-bottom: 1.25rem;
             scroll-margin-top: 1rem;
         }
-        .tension h2 { 
-            font-size: 1.15rem; 
-            font-weight: 600; 
+
+        .tension h2 {
+            font-size: 1.15rem;
+            font-weight: 600;
             margin-bottom: 0.5rem;
         }
-        .tension .mechanism { 
-            color: #999; 
-            font-size: 0.95rem; 
+
+        .tension .mechanism {
+            color: #999;
+            font-size: 0.95rem;
             margin-bottom: 0.75rem;
         }
-        .tension .mechanism strong { color: var(--accent); }
-        .tension .tags { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 0.75rem; }
-        .tag { 
-            background: var(--border); 
-            padding: 0.15rem 0.5rem; 
-            border-radius: 3px; 
-            font-size: 0.7rem; 
+
+        .tension .mechanism strong {
+            color: var(--accent);
+        }
+
+        .tension .tags {
+            display: flex;
+            gap: 0.4rem;
+            flex-wrap: wrap;
+            margin-bottom: 0.75rem;
+        }
+
+        .tag {
+            background: var(--border);
+            padding: 0.15rem 0.5rem;
+            border-radius: 3px;
+            font-size: 0.7rem;
             color: var(--text-muted);
         }
+
         .related-link {
             font-size: 0.85rem;
             color: var(--accent);
         }
-        
-        footer { 
-            margin-top: 4rem; 
-            padding-top: 2rem; 
-            border-top: 1px solid var(--border); 
-            color: var(--text-muted); 
-            font-size: 0.8rem; 
+
+        footer {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 0.8rem;
             text-align: center;
+        }
+
+        /* ── Animations ─────────────────────────────────────────── */
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        header {
+            animation: fadeIn .4s ease both;
+        }
+
+        h1,
+        .intro {
+            animation: fadeUp .45s .06s ease both;
+        }
+
+        /* Stagger tension cards */
+        .tension {
+            animation: fadeUp .4s ease both;
+        }
+
+        .tension:nth-child(1) {
+            animation-delay: .15s;
+        }
+
+        .tension:nth-child(2) {
+            animation-delay: .2s;
+        }
+
+        .tension:nth-child(3) {
+            animation-delay: .25s;
+        }
+
+        .tension:nth-child(4) {
+            animation-delay: .3s;
+        }
+
+        .tension:nth-child(5) {
+            animation-delay: .35s;
+        }
+
+        .tension:nth-child(6) {
+            animation-delay: .38s;
+        }
+
+        .tension:nth-child(n+7) {
+            animation-delay: .42s;
+        }
+
+        /* Tension card hover: accent border glow */
+        .tension {
+            transition: border-color .2s, box-shadow .2s;
+        }
+
+        .tension:hover {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 1px rgba(230, 57, 70, .18), 0 4px 16px rgba(230, 57, 70, .1);
+        }
+
+        /* Nav underline slide */
+        nav a {
+            position: relative;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -2px;
+            width: 0;
+            height: 1px;
+            background: var(--accent);
+            transition: width .25s ease;
+        }
+
+        nav a:hover::after {
+            width: 100%;
         }
     </style>
 </head>
+
 <body>
     <header>
         <a href="/" class="logo">THE TRUTH<span>.</span></a>
@@ -116,8 +252,9 @@
 
     <main>
         <h1>Căng Thẳng Hệ Thống</h1>
-        <p class="intro">Các căng thẳng cốt lõi định hình thực tại tầng lớp trung lưu Việt Nam. Mỗi căng thẳng có cơ chế. Mỗi căng thẳng có cái giá.</p>
-        
+        <p class="intro">Các căng thẳng cốt lõi định hình thực tại tầng lớp trung lưu Việt Nam. Mỗi căng thẳng có cơ
+            chế. Mỗi căng thẳng có cái giá.</p>
+
         {% for tension in tensions_list %}
         <div class="tension" id="{{ tension.id }}">
             <h2>{{ tension.name }}</h2>
@@ -129,12 +266,12 @@
             </div>
             <a href="/tags/{{ tension.tags[0] }}.html" class="related-link">Xem bài phân tích →</a>
         </div>
-{% endfor %}
+        {% endfor %}
     </main>
 
     <footer>
         <p>© 2026 THE TRUTH — Giải mã thực tại hệ thống</p>
     </footer>
 </body>
-</html>
 
+</html>

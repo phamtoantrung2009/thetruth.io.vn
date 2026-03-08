@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,7 +21,13 @@
             --card-bg: #141414;
             --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
             background: var(--bg);
             color: var(--text);
@@ -30,45 +37,73 @@
             margin: 0 auto;
             padding: 0 1.5rem 3rem;
         }
-        a { color: var(--accent); text-decoration: none; }
-        a:hover { text-decoration: underline; }
-        
-        header { 
-            display: flex; 
-            justify-content: space-between; 
+
+        a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
             align-items: center;
             padding: 1.5rem 0;
             border-bottom: 1px solid var(--border);
             margin-bottom: 2.5rem;
         }
-        .logo { font-size: 1.4rem; font-weight: 700; letter-spacing: -0.02em; }
-        .logo span { color: var(--accent); }
-        nav a { 
-            color: var(--text-muted); 
-            margin-left: 1.5rem; 
+
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .logo span {
+            color: var(--accent);
+        }
+
+        nav a {
+            color: var(--text-muted);
+            margin-left: 1.5rem;
             font-size: 0.9rem;
         }
-        nav a:hover { color: var(--text); }
-        
-        h1 { 
-            font-size: 2rem; 
-            font-weight: 700; 
+
+        nav a:hover {
+            color: var(--text);
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 700;
             margin-bottom: 1.5rem;
         }
-        h2 { 
-            font-size: 1.35rem; 
-            font-weight: 600; 
+
+        h2 {
+            font-size: 1.35rem;
+            font-weight: 600;
             margin: 2rem 0 1rem;
             padding-bottom: 0.5rem;
             border-bottom: 1px solid var(--border);
         }
-        p { 
-            margin-bottom: 1.25rem; 
+
+        p {
+            margin-bottom: 1.25rem;
             color: #ccc;
         }
-        ul { margin: 1rem 0 1.5rem 1.5rem; }
-        li { margin-bottom: 0.5rem; color: #bbb; }
-        
+
+        ul {
+            margin: 1rem 0 1.5rem 1.5rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+            color: #bbb;
+        }
+
         .statement {
             font-size: 1.15rem;
             color: var(--text);
@@ -76,17 +111,79 @@
             padding-left: 1.25rem;
             margin: 2rem 0;
         }
-        
-        footer { 
-            margin-top: 4rem; 
-            padding-top: 2rem; 
-            border-top: 1px solid var(--border); 
-            color: var(--text-muted); 
-            font-size: 0.8rem; 
+
+        footer {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 0.8rem;
             text-align: center;
+        }
+
+        /* ── Animations ─────────────────────────────────────────── */
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        header {
+            animation: fadeIn .4s ease both;
+        }
+
+        main {
+            animation: fadeUp .5s .08s ease both;
+        }
+
+        /* Nav underline slide */
+        nav a {
+            position: relative;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -2px;
+            width: 0;
+            height: 1px;
+            background: var(--accent);
+            transition: width .25s ease;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        /* Statement blockquote-style hover accent */
+        .statement {
+            transition: border-color .25s, padding-left .2s;
+        }
+
+        .statement:hover {
+            border-color: #ff6b6b;
+            padding-left: 1.6rem;
         }
     </style>
 </head>
+
 <body>
     <header>
         <a href="/" class="logo">THE TRUTH<span>.</span></a>
@@ -99,14 +196,17 @@
 
     <main>
         <h1>Về THE TRUTH</h1>
-        
-        <p class="statement">Chúng tôi giải mã thực tại kinh tế-xã hội cho nam giới Việt Nam 30+. Bình tĩnh. Chính xác. Sự thật khó chịu.</p>
-        
+
+        <p class="statement">Chúng tôi giải mã thực tại kinh tế-xã hội cho nam giới Việt Nam 30+. Bình tĩnh. Chính xác.
+            Sự thật khó chịu.</p>
+
         <h2>Chúng Tôi Là Gì</h2>
-        <p>THE TRUTH là một công cụ quan sát — không phải chatbot, không phải diễn giả động viên, không phải người giải trí. Chúng tôi là tấm gương cho thực tại hệ thống.</p>
-        
-        <p>Chúng tôi phân tích các lực định hình cuộc sống tầng lớp trung lưu Việt Nam: thu nhập vs tài sản, làm việc vs vốn, ổn định vs thoát. Không để đưa ra câu trả lời, mà để làm rõ câu hỏi.</p>
-        
+        <p>THE TRUTH là một công cụ quan sát — không phải chatbot, không phải diễn giả động viên, không phải người giải
+            trí. Chúng tôi là tấm gương cho thực tại hệ thống.</p>
+
+        <p>Chúng tôi phân tích các lực định hình cuộc sống tầng lớp trung lưu Việt Nam: thu nhập vs tài sản, làm việc vs
+            vốn, ổn định vs thoát. Không để đưa ra câu trả lời, mà để làm rõ câu hỏi.</p>
+
         <h2>Chúng Tôi Không Làm Gì</h2>
         <ul>
             <li><strong>Không khai thác phẫn nộ.</strong> Chúng tôi không lợi dụng tức giận để tăng engagement.</li>
@@ -114,15 +214,16 @@
             <li><strong>Không chính trị.</strong> Chúng tôi phân tích cấu trúc, không phải đảng phái.</li>
             <li><strong>Không tư duy nạn nhân.</strong> Chúng tôi vạch trần hệ thống, không đổ lỗi cá nhân.</li>
         </ul>
-        
+
         <h2>Phương Pháp Luận</h2>
         <p>Phân tích của chúng tôi dựa trên 3 nguyên tắc:</p>
         <ul>
-            <li><strong>Hệ thống, không phải cá nhân.</strong> Vấn đề không bao giờ là "lỗi của bạn" — đó là thiết kế.</li>
+            <li><strong>Hệ thống, không phải cá nhân.</strong> Vấn đề không bao giờ là "lỗi của bạn" — đó là thiết kế.
+            </li>
             <li><strong>Bằng chứng hơn giả định.</strong> Chúng tôi đánh giá bằng dữ liệu, không phải cảm xúc.</li>
             <li><strong>Giải pháp hơn phẫn nộ.</strong> Mỗi bài phân tích đều có góc nhìn, không tạo tuyệt vọng.</li>
         </ul>
-        
+
         <h2>Các Căng Thẳng</h2>
         <p>Chúng tôi theo dõi 15 căng thẳng cốt lõi trong 4 lĩnh vực:</p>
         <ul>
@@ -131,7 +232,7 @@
             <li><strong>Cấu trúc:</strong> Vị trí cố định, ổn định vs rủi ro, sở hữu vs thuê trọ</li>
             <li><strong>Bản sắc:</strong> Danh dự vs chân thực, tôn thờ tuổi trẻ vs trí tuệ tích lũy</li>
         </ul>
-        
+
         <h2>Liên Hệ</h2>
         <p>Đây là một công cụ. Nó không có bộ phận chăm sóc khách hàng.</p>
         <p>Follow TikTok: @pepsiman1331</p>
@@ -141,4 +242,5 @@
         <p>© 2026 THE TRUTH — Giải mã thực tại hệ thống</p>
     </footer>
 </body>
+
 </html>
