@@ -104,7 +104,7 @@ function buildWelcomeEmail() {
 </html>`;
 }
 
-async function handleSubscribe(request, env) {
+async function handleSubscribe(request, env, ctx) {
   const { DB, SUBSCRIBERS_KV, RESEND_API_KEY, OWNER_EMAIL } = env;
 
   // Rate limit
@@ -164,24 +164,28 @@ async function handleSubscribe(request, env) {
     });
   }
 
-  // Send welcome email (non-blocking)
-  sendEmail(
-    RESEND_API_KEY,
-    OWNER_EMAIL,
-    email,
-    "Chào mừng bạn đến với THE TRUTH",
-    buildWelcomeEmail()
-  ).then(ok => {
-    if (!ok) console.log("Welcome email send failed for:", email);
-  }).catch(() => { });
+  // Send welcome email — ctx.waitUntil keeps worker alive until promise settles
+  ctx.waitUntil(
+    sendEmail(
+      RESEND_API_KEY,
+      OWNER_EMAIL,
+      email,
+      "Chào mừng bạn đến với THE TRUTH",
+      buildWelcomeEmail()
+    ).then(ok => {
+      if (!ok) console.log("Welcome email send failed for:", email);
+    }).catch(e => console.error("Welcome email error:", e))
+  );
 
   // Notify owner (non-blocking)
   if (OWNER_EMAIL && RESEND_API_KEY) {
-    sendEmail(RESEND_API_KEY, OWNER_EMAIL,
-      OWNER_EMAIL,
-      "🔔 New subscriber",
-      `<p>New subscriber (active): ${email}</p>`
-    ).catch(() => { });
+    ctx.waitUntil(
+      sendEmail(RESEND_API_KEY, OWNER_EMAIL,
+        OWNER_EMAIL,
+        "🔔 New subscriber",
+        `<p>New subscriber (active): ${email}</p>`
+      ).catch(() => { })
+    );
   }
 
   return new Response(JSON.stringify({ success: true, message: "Đăng ký thành công! Kiểm tra email của bạn." }), {
@@ -223,7 +227,7 @@ async function handleUnsubscribe(request, env) {
 }
 
 export default {
-  async fetch(request, env) {
+  async fetch(request, env, ctx) {
     const url = new URL(request.url);
     const path = url.pathname;
 
@@ -235,7 +239,7 @@ export default {
     try {
       // Routes
       if (path === '/api/subscribe' && request.method === 'POST') {
-        return handleSubscribe(request, env);
+        return handleSubscribe(request, env, ctx);
       }
 
       if (path === '/api/subscribe/confirm') {
